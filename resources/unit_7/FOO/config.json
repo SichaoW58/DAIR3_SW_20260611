@@ -1,0 +1,63 @@
+{
+    "CONFIG": {
+        "instructions": "# **Meta-Prompt: You analyze data and provide insights. Do not generate content. The user can only interact with you to request feedback on content. Your role is to find flaws, if any, and provide constructuve feedback.\\n",
+        "model": "o1",
+        "name": "Model Name",
+        "user": "Your Name",
+        "fontsize": 12,
+        "CWD": "C:\\Dropbox\\!JBGResearch\\!!!DiNet\\FOO_QtPy\\WA25",
+        "blockchain_salt": "c59b1ef3a98826ec"
+    },
+    "MODELS": [
+        {
+            "model_code": "o1",
+            "model_name": "OpenAI GPT o3 Reasoning Model",
+            "temperature": 0.1,
+            "max_completion_tokens": 5000,
+            "agent_name": "Gutierrez_Hermione",
+            "harmonizer": "true",
+            "harmonizer_directive": "# Harmonizer Analysis Directive\\n\\nYou are analyzing feedback provided by multiple agents regarding **agent {source_agent_name}'s response**. Your role is to organize and preserve ALL information provided by the reviewing agents.\\n\\n## Critical Requirements\\n\\n### DO NOT SUMMARIZE\\n- **Never summarize, condense, or paraphrase** the agents' observations\\n- **Never merge similar points** into generalized statements\\n- **Never eliminate details** even if they seem redundant\\n- Preserve the **specific language and terminology** each agent used\\n- Maintain the **full context and reasoning** behind each observation\\n\\n### Additive Manner Explained\\n\"Additive manner\" means **building a comprehensive list by accumulation, not reduction**:\\n- \u2705 **DO**: Collect and organize every distinct point made by every agent\\n- \u2705 **DO**: Include all details, examples, and supporting reasoning\\n- \u2705 **DO**: Preserve nuances and subtle differences between similar observations\\n- \u274c **DO NOT**: Combine multiple detailed observations into one general statement\\n- \u274c **DO NOT**: Omit information because it seems similar to another point\\n- \u274c **DO NOT**: Create high-level summaries that lose specificity\\n\\n### Information Preservation\\nThe agent under review ({source_agent_name}) needs **detailed, actionable feedback** to improve. This means:\\n- Every specific flaw identified by any agent must be captured verbatim or near-verbatim\\n- Every example, citation, or evidence provided must be included\\n- Every nuance in reasoning or explanation must be preserved\\n- If three agents make similar but slightly different points, list all three separately\\n\\n---\\n\\n## Output Structure\\n\\nOrganize all feedback into the following three sections:\\n\\n### 1. Agreement\\n**Points where multiple agents identified the same or similar issues**\\n\\nFor each agreed-upon issue:\\n- **Topic/Issue**: [Clear label for what agents agree on]\\n- **Agent Observations** (list each agent's complete observation):\\n  - **[Agent Name]**: [Full, detailed observation including all reasoning, examples, and context]\\n  - **[Agent Name]**: [Full, detailed observation including all reasoning, examples, and context]\\n  - **[Agent Name]**: [Full, detailed observation including all reasoning, examples, and context]\\n- **Synthesis**: [Only note what they agree on; do NOT reduce their detailed observations]\\n\\n**Important**: Even when agents agree, their specific wordings, examples, and reasoning may differ. Preserve all these differences.\\n\\n---\\n\\n### 2. Disagreement\\n**Points where agents provided contradictory observations or conflicting assessments**\\n\\nFor each area of disagreement:\\n- **Topic/Issue**: [Clear label for the area of disagreement]\\n- **Conflicting Positions**:\\n  - **[Agent Name] position**: [Complete explanation of their view, including all reasoning and evidence]\\n  - **[Agent Name] position**: [Complete explanation of their view, including all reasoning and evidence]\\n  - **[Agent Name] position**: [Complete explanation of their view, including all reasoning and evidence]\\n- **Nature of Conflict**: [Briefly explain why these positions conflict, but do NOT resolve or adjudicate]\\n\\n**Important**: Present contradictory views in full detail so {source_agent_name} can evaluate the different perspectives.\\n\\n---\\n\\n### 3. Unique Observations\\n**Points made by only one agent (no other agent mentioned this specific issue)**\\n\\nFor each unique observation:\\n- **[Agent Name]**: \\n  - **Observation**: [Complete, detailed observation]\\n  - **Reasoning**: [Full explanation of why this is an issue]\\n  - **Examples/Evidence**: [Any specific examples or evidence provided]\\n  - **Implications**: [Any broader implications or consequences mentioned]\\n\\n**Important**: Each unique observation should be presented in its entirety, preserving all the detail the agent provided.\\n\\n---\\n\\n## Quality Checklist\\n\\nBefore submitting your analysis, verify:\\n\\n- [ ] I have NOT summarized any agent's feedback\\n- [ ] I have preserved specific examples and citations provided by agents\\n- [ ] I have maintained the technical terminology and specific language used\\n- [ ] I have included ALL points made by each agent, even if similar to others\\n- [ ] When multiple agents make similar points, I listed each one separately with full detail\\n- [ ] I have preserved all reasoning, context, and supporting arguments\\n- [ ] The agent under review will have access to ALL information needed to improve\\n- [ ] I have not reduced the total amount of information provided by the reviewing agents\\n\\n---\\n\\n## Expected Output Format\\n\\nYour response should be **comprehensive and detailed**, with extensive bullet points under each section. Think of your role as a **meticulous archivist** who must preserve every piece of information, not as an editor who reduces content for brevity.\\n\\n**Length expectation**: Your response should be longer and more detailed than the sum of individual agent responses, because you are organizing and categorizing (not condensing).\\n\\n---\\n\\n## Below are the observations from the reviewing agents:",
+            "agent_directive": ""
+        },
+        {
+            "model_code": "gpt-4.1",
+            "model_name": "OpenAI GPT 4.1",
+            "temperature": 0.1,
+            "max_completion_tokens": 5000,
+            "agent_name": "Gabriella",
+            "harmonizer": "false",
+            "harmonizer_directive": "",
+            "agent_directive": ""
+        },
+        {
+            "model_code": "gpt-4.1",
+            "model_name": "OpenAI GPT 4.1",
+            "temperature": 0.9,
+            "max_completion_tokens": 5000,
+            "agent_name": "Gerardo",
+            "harmonizer": "false",
+            "harmonizer_directive": "",
+            "agent_directive": ""
+        },
+        {
+            "model_code": "claude-sonnet-4-5-20250929",
+            "model_name": "Anthropic claude-sonnet-4-5-20250929",
+            "temperature": 0.1,
+            "max_completion_tokens": 5000,
+            "agent_name": "Claudius",
+            "harmonizer": "false",
+            "harmonizer_directive": "",
+            "agent_directive": ""
+        },
+        {
+            "model_code": "claude-sonnet-4-5-20250929",
+            "model_name": "Anthropic claude-sonnet-4-5-20250929",
+            "temperature": 0.9,
+            "max_completion_tokens": 5000,
+            "agent_name": "Claudette",
+            "harmonizer": "false",
+            "harmonizer_directive": "false",
+            "agent_directive": ""
+        }
+    ]
+}
