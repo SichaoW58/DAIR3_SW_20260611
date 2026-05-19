@@ -8,13 +8,25 @@ from google import genai
 from google.genai import types
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QTextEdit, QLineEdit, QVBoxLayout,
-    QPushButton, QTabWidget, QHBoxLayout, QCheckBox, QLabel, QScrollArea
+    QPushButton, QTabWidget, QHBoxLayout, QCheckBox, QLabel, QScrollArea,
+    QSpinBox
 )
 from PyQt5.QtCore import QThread, pyqtSignal
 
 # Force UTF-8 encoding for stdout and stderr
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+
+HARMONIZER_FALLBACK_DIRECTIVE = (
+    "The following statements are the flaws others found for agent {source_agent_name}'s response."
+    " Organize their responses by topic in an additive manner (that is, do not eliminate information)."
+    " Structure your response using the following sections: 'Agreement', 'Disagreement', and 'Unique observations'."
+    " In 'Agreement', list ideas supported by multiple agents. In 'Disagreement', note contradictory statements."
+    " In 'Unique observations', highlight observations made by only one agent."
+    " The agent under review needs detailed responses to be able to improve."
+    " Produce the content for these sections with detailed bulletpoints."
+)
+
 
 class OpenAIWorker(QThread):
     result_ready = pyqtSignal(str)
@@ -84,12 +96,16 @@ class ClaudeWorker(QThread):
             self.result_ready.emit(f"Error: {e}")
 
 class AgentTab(QWidget):
-    def __init__(self, model, name, instructions, user, engine):
+    log_signal = pyqtSignal(str)
+
+    def __init__(self, model, name, instructions, user, engine, harmonizer=False, harmonizer_directive=""):
         super().__init__()
         self.user = user
         self.name = name
         self.model = model
         self.engine = engine
+        self.harmonizer = harmonizer
+        self.harmonizer_directive = harmonizer_directive or ""
         self.latest_response = ""
         self.active = True  # Controlled by checkbox
 
@@ -121,7 +137,8 @@ class AgentTab(QWidget):
     def init_ui(self):
         layout = QVBoxLayout()
 
-        self.checkbox = QCheckBox(f"Enable {self.name}")
+        role_text = "Harmonizer" if self.harmonizer else "Reviewer"
+        self.checkbox = QCheckBox(f"Enable {self.name} ({role_text})")
         self.checkbox.setChecked(True)
         self.checkbox.stateChanged.connect(self.toggle_active)
         layout.addWidget(self.checkbox)
@@ -134,6 +151,8 @@ class AgentTab(QWidget):
 
         self.copy_button.clicked.connect(self.copy_latest_answer)
         layout.addWidget(self.copy_button)
+
+        self.log_signal.connect(self.text_area.append)
 
         self.setLayout(layout)
 
@@ -168,6 +187,130 @@ class AgentTab(QWidget):
         QApplication.clipboard().setText(self.latest_response)
         self.text_area.append("Latest answer copied to clipboard.")
 
+    def send_message_sync(self, text, sender_label=None):
+        sender = sender_label or self.user
+        self.log_signal.emit(f"{sender}: {text}")
+        self.log_signal.emit(">>>>>>>>>>>>>>>>>>>>>>>>>>")
+        try:
+            if self.engine == "openai":
+                response = self._openai_sync(text)
+            elif self.engine == "google":
+                response = self._google_sync(text)
+            else:
+                response = self._claude_sync(text)
+        except Exception as e:
+            response = f"Error: {e}"
+        self.latest_response = response
+        self.log_signal.emit(f"{self.name}: {response}")
+        self.log_signal.emit("<<<<<<<<<<<<<<<<<<<<<<<<<<")
+        return response
+
+    def _openai_sync(self, text):
+        kwargs = {
+            "model": self.model,
+            "instructions": self.instructions,
+            "input": text,
+        }
+        if self.previous_response_id:
+            kwargs["previous_response_id"] = self.previous_response_id
+        response = self.client.responses.create(**kwargs)
+        self.previous_response_id = response.id
+        return response.output_text
+
+    def _google_sync(self, text):
+        return self.chat.send_message(text).text
+
+    def _claude_sync(self, text):
+        self.history.append({"role": "user", "content": text})
+        response = self.client.messages.create(
+            model=self.model,
+            max_tokens=1000,
+            temperature=0.99,
+            messages=self.history,
+        )
+        content = response.content[0].text
+        self.history.append({"role": "assistant", "content": content})
+        return content
+
+
+class FOOOrchestratorWorker(QThread):
+    finished_signal = pyqtSignal()
+
+    def __init__(self, user_text, non_harmonizers, harmonizers, iterations):
+        super().__init__()
+        self.user_text = user_text
+        self.non_harmonizers = non_harmonizers
+        self.harmonizers = harmonizers
+        self.iterations = iterations
+
+    def run(self):
+        for tab in self.non_harmonizers:
+            tab.log_signal.emit("--- Initial Broadcast ---")
+            tab.send_message_sync(self.user_text)
+
+        if self.iterations <= 0:
+            self.finished_signal.emit()
+            return
+
+        if len(self.non_harmonizers) < 2:
+            for tab in self.non_harmonizers:
+                tab.log_signal.emit(
+                    "[FOO] Need at least 2 active non-harmonizer agents for critique cycles. Stopping after broadcast."
+                )
+            self.finished_signal.emit()
+            return
+
+        for cycle in range(1, self.iterations + 1):
+            for source in self.non_harmonizers:
+                vuln_msg = (
+                    f"Agent {source.name} answered the same question as follows, find flaws: "
+                    f"{source.latest_response}"
+                )
+                critiques = {}
+                for reviewer in self.non_harmonizers:
+                    if reviewer is source:
+                        continue
+                    reviewer.log_signal.emit(
+                        f"--- Cycle {cycle} | Vulnerability: critique of {source.name} ---"
+                    )
+                    critiques[reviewer.name] = reviewer.send_message_sync(vuln_msg)
+
+                composite = "".join(
+                    f"\n \n Agent {name}: {resp}" for name, resp in critiques.items()
+                )
+
+                harmonizer_outputs = []
+                for harmonizer in self.harmonizers:
+                    if harmonizer.harmonizer_directive:
+                        directive = harmonizer.harmonizer_directive.replace(
+                            "{source_agent_name}", source.name
+                        )
+                    else:
+                        directive = HARMONIZER_FALLBACK_DIRECTIVE.format(
+                            source_agent_name=source.name
+                        )
+                    judgment_msg = f"{directive} \n \n {composite}"
+                    harmonizer.log_signal.emit(
+                        f"--- Cycle {cycle} | Judgment on {source.name} ---"
+                    )
+                    harmonizer_outputs.append(harmonizer.send_message_sync(judgment_msg))
+
+                reflection_input = (
+                    "---".join(harmonizer_outputs) if harmonizer_outputs else composite
+                )
+                reflection_msg = (
+                    "Judgment of your response has resulted in the observations that follow. "
+                    "Regenerate your version of the text under review taking into account the consensus of these observations. "
+                    "If you object to an observation, explain why. \n \n " + reflection_input
+                )
+                source.log_signal.emit(
+                    f"--- Cycle {cycle} | Reflection on {source.name} ---"
+                )
+                source.send_message_sync(reflection_msg)
+
+        self.finished_signal.emit()
+
+
 class MultiAgentChat(QWidget):
     def __init__(self):
         super().__init__()
@@ -200,12 +343,21 @@ class MultiAgentChat(QWidget):
                 engine = "google"
             else:
                 engine = "openai"
+
+            harmonizer_raw = entry.get("harmonizer", False)
+            if isinstance(harmonizer_raw, bool):
+                harmonizer = harmonizer_raw
+            else:
+                harmonizer = str(harmonizer_raw).strip().lower() == "true"
+
             tab = AgentTab(
                 model=model_code,
                 name=entry["agent_name"],
                 instructions=config["instructions"],
                 user=self.user,
-                engine=engine
+                engine=engine,
+                harmonizer=harmonizer,
+                harmonizer_directive=entry.get("harmonizer_directive", "") or "",
             )
             self.tabs.addTab(tab, entry["agent_name"])
             self.agent_tabs.append(tab)
@@ -214,22 +366,57 @@ class MultiAgentChat(QWidget):
         self.user_input.setPlaceholderText("Broadcast message to all active agents")
         self.user_input.returnPressed.connect(self.broadcast_message)
 
+        self.iterations_spin = QSpinBox()
+        self.iterations_spin.setRange(0, 20)
+        self.iterations_spin.setValue(3)
+        self.iterations_spin.setFixedWidth(60)
+
+        input_row = QHBoxLayout()
+        input_row.addWidget(self.user_input, 1)
+        input_row.addWidget(QLabel("FOO Cycles:"))
+        input_row.addWidget(self.iterations_spin)
+
         layout = QVBoxLayout()
         layout.addWidget(self.tabs)
         layout.addWidget(QLabel("Message to All Active Agents:"))
-        layout.addWidget(self.user_input)
+        layout.addLayout(input_row)
         self.setLayout(layout)
 
         self.setWindowTitle("Multi-Agent GPT + Claude + Gemini Interface")
         self.resize(700, 500)
 
+        self.orchestrator = None
+
     def broadcast_message(self):
         text = self.user_input.text().strip()
         if not text:
             return
-        for tab in self.agent_tabs:
-            tab.handle_input(text)
+        if self.orchestrator is not None and self.orchestrator.isRunning():
+            return
+
+        active = [t for t in self.agent_tabs if t.active]
+        non_harmonizers = [t for t in active if not t.harmonizer]
+        harmonizers = [t for t in active if t.harmonizer]
+
+        if not non_harmonizers:
+            return
+
         self.user_input.clear()
+        self.user_input.setEnabled(False)
+        self.user_input.setPlaceholderText("FOO run in progress...")
+
+        self.orchestrator = FOOOrchestratorWorker(
+            user_text=text,
+            non_harmonizers=non_harmonizers,
+            harmonizers=harmonizers,
+            iterations=self.iterations_spin.value(),
+        )
+        self.orchestrator.finished_signal.connect(self.on_foo_finished)
+        self.orchestrator.start()
+
+    def on_foo_finished(self):
+        self.user_input.setEnabled(True)
+        self.user_input.setPlaceholderText("Broadcast message to all active agents")
 
 if __name__ == "__main__":
     app = QApplication([])
