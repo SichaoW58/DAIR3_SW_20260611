@@ -1,0 +1,1613 @@
+{
+    "models": [
+        {
+            "n_ordo": 10,
+            "cd_model": "claude-opus-4-7",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "Claude Opus 4.7",
+            "cd_provider": "anthropic",
+            "ds_description": "Most capable generally available Claude — complex reasoning and agentic coding. 1M context, $5/$25 per MTok.",
+            "cd_model_category": "reasoning",
+            "cd_reasoning_kind": "anthropic_adaptive",
+            "n_default_timeout_s": 120,
+            "ds_skip_sampling_fields": [
+                "top_p",
+                "temperature"
+            ],
+            "ds_reasoning_ladder_json": {
+                "low": {
+                    "effort": "low",
+                    "timeout_s": 90
+                },
+                "off": {
+                    "effort": null,
+                    "timeout_s": 60
+                },
+                "high": {
+                    "effort": "high",
+                    "timeout_s": 900
+                },
+                "xhigh": {
+                    "effort": "xhigh",
+                    "timeout_s": 1800
+                },
+                "medium": {
+                    "effort": "medium",
+                    "timeout_s": 300
+                }
+            }
+        },
+        {
+            "n_ordo": 20,
+            "cd_model": "claude-sonnet-4-6",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "Claude Sonnet 4.6",
+            "cd_provider": "anthropic",
+            "ds_description": "Best combination of speed and intelligence. 1M context, $3/$15 per MTok.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": "anthropic_adaptive",
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+                "top_p"
+            ],
+            "ds_reasoning_ladder_json": {
+                "low": {
+                    "effort": "low",
+                    "timeout_s": 60
+                },
+                "off": {
+                    "effort": null,
+                    "timeout_s": 30
+                },
+                "high": {
+                    "effort": "high",
+                    "timeout_s": 600
+                },
+                "medium": {
+                    "effort": "medium",
+                    "timeout_s": 180
+                }
+            }
+        },
+        {
+            "n_ordo": 30,
+            "cd_model": "claude-haiku-4-5",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "Claude Haiku 4.5",
+            "cd_provider": "anthropic",
+            "ds_description": "Fastest Claude with near-frontier intelligence. 200K context, $1/$5 per MTok.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": "anthropic_thinking",
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+                "top_p"
+            ],
+            "ds_reasoning_ladder_json": {
+                "low": {
+                    "timeout_s": 60,
+                    "budget_tokens": 1024
+                },
+                "off": {
+                    "timeout_s": 30,
+                    "budget_tokens": null
+                },
+                "high": {
+                    "timeout_s": 600,
+                    "budget_tokens": 16384
+                },
+                "medium": {
+                    "timeout_s": 180,
+                    "budget_tokens": 4096
+                }
+            }
+        },
+        {
+            "n_ordo": 31,
+            "cd_model": "claude-haiku-4-5-20251001",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "Claude Haiku 4.5 (snapshot)",
+            "cd_provider": "anthropic",
+            "ds_description": "Snapshot ID for Haiku 4.5; pin when reproducibility across deployments matters.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": "anthropic_thinking",
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": {
+                "low": {
+                    "timeout_s": 60,
+                    "budget_tokens": 1024
+                },
+                "off": {
+                    "timeout_s": 30,
+                    "budget_tokens": null
+                },
+                "high": {
+                    "timeout_s": 600,
+                    "budget_tokens": 16384
+                },
+                "medium": {
+                    "timeout_s": 180,
+                    "budget_tokens": 4096
+                }
+            }
+        },
+        {
+            "n_ordo": 10,
+            "cd_model": "gemini-2.5-pro",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "Gemini 2.5 Pro",
+            "cd_provider": "gemini",
+            "ds_description": "Google's most capable Gemini for complex reasoning, multimodal input. 1M context.",
+            "cd_model_category": "reasoning",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 20,
+            "cd_model": "gemini-2.5-flash",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "Gemini 2.5 Flash",
+            "cd_provider": "gemini",
+            "ds_description": "Fast, cost-efficient multimodal model with strong general capability. 1M context.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 30,
+            "cd_model": "gemini-2.5-flash-lite",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "Gemini 2.5 Flash-Lite",
+            "cd_provider": "gemini",
+            "ds_description": "Smallest, lowest-latency Gemini 2.5; high-volume tasks.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 40,
+            "cd_model": "gemini-1.5-pro",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "Gemini 1.5 Pro",
+            "cd_provider": "gemini",
+            "ds_description": "Previous-gen Pro; 2M context.",
+            "cd_model_category": "reasoning",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 50,
+            "cd_model": "gemini-1.5-flash",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "Gemini 1.5 Flash",
+            "cd_provider": "gemini",
+            "ds_description": "Previous-gen Flash; 1M context.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 10,
+            "cd_model": "llama3.1",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "Llama 3.1 8B",
+            "cd_provider": "ollama",
+            "ds_description": "Meta Llama 3.1 8B Instruct — common default for self-hosted chat.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 11,
+            "cd_model": "llama3.1:70b",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "Llama 3.1 70B",
+            "cd_provider": "ollama",
+            "ds_description": "Meta Llama 3.1 70B — much larger; needs ample VRAM.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 20,
+            "cd_model": "mistral",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "Mistral 7B",
+            "cd_provider": "ollama",
+            "ds_description": "Mistral 7B Instruct — small, fast, broad.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 30,
+            "cd_model": "qwen2.5",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "Qwen 2.5 7B",
+            "cd_provider": "ollama",
+            "ds_description": "Alibaba Qwen 2.5 7B — strong multilingual + math.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 31,
+            "cd_model": "qwen2.5-coder",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "Qwen 2.5 Coder 7B",
+            "cd_provider": "ollama",
+            "ds_description": "Qwen 2.5 fine-tuned for code; viable local alternative to closed coding models.",
+            "cd_model_category": "coding",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 40,
+            "cd_model": "phi3",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "Phi-3",
+            "cd_provider": "ollama",
+            "ds_description": "Microsoft Phi-3 — compact, capable for size.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 50,
+            "cd_model": "gemma2",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "Gemma 2",
+            "cd_provider": "ollama",
+            "ds_description": "Google Gemma 2 — open-weight, available in multiple sizes.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 60,
+            "cd_model": "nomic-embed-text",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "Nomic Embed Text",
+            "cd_provider": "ollama",
+            "ds_description": "Open embedding model commonly available via Ollama.",
+            "cd_model_category": "embedding",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 10,
+            "cd_model": "gpt-5.5",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-5.5",
+            "cd_provider": "openai",
+            "ds_description": "New class of intelligence for coding and professional work.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+                "temperature"
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 11,
+            "cd_model": "gpt-5.5-pro",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-5.5 Pro",
+            "cd_provider": "openai",
+            "ds_description": "GPT-5.5 with more compute for smarter, more precise responses.",
+            "cd_model_category": "reasoning",
+            "cd_reasoning_kind": "openai_effort",
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": {
+                "low": {
+                    "effort": "low",
+                    "timeout_s": 60
+                },
+                "off": {
+                    "effort": null,
+                    "timeout_s": 30
+                },
+                "high": {
+                    "effort": "high",
+                    "timeout_s": 1800
+                },
+                "medium": {
+                    "effort": "medium",
+                    "timeout_s": 300
+                }
+            }
+        },
+        {
+            "n_ordo": 12,
+            "cd_model": "gpt-5.4",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-5.4",
+            "cd_provider": "openai",
+            "ds_description": "A more affordable model for coding and professional work.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 13,
+            "cd_model": "gpt-5.4-pro",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-5.4 Pro",
+            "cd_provider": "openai",
+            "ds_description": "GPT-5.4 with more compute for smarter responses.",
+            "cd_model_category": "reasoning",
+            "cd_reasoning_kind": "openai_effort",
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": {
+                "low": {
+                    "effort": "low",
+                    "timeout_s": 60
+                },
+                "off": {
+                    "effort": null,
+                    "timeout_s": 30
+                },
+                "high": {
+                    "effort": "high",
+                    "timeout_s": 1800
+                },
+                "medium": {
+                    "effort": "medium",
+                    "timeout_s": 300
+                }
+            }
+        },
+        {
+            "n_ordo": 14,
+            "cd_model": "gpt-5.4-mini",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-5.4 Mini",
+            "cd_provider": "openai",
+            "ds_description": "Strongest mini model for coding, computer use, and subagents.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 15,
+            "cd_model": "gpt-5.4-nano",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-5.4 Nano",
+            "cd_provider": "openai",
+            "ds_description": "Cheapest GPT-5.4-class model for simple high-volume tasks.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 16,
+            "cd_model": "gpt-5-mini",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-5 Mini",
+            "cd_provider": "openai",
+            "ds_description": "Near-frontier intelligence for cost-sensitive, low-latency, high-volume workloads.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+                "temperature"
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 17,
+            "cd_model": "gpt-5-nano",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-5 Nano",
+            "cd_provider": "openai",
+            "ds_description": "Fastest, most cost-efficient version of GPT-5.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 18,
+            "cd_model": "gpt-5",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-5",
+            "cd_provider": "openai",
+            "ds_description": "Previous intelligent reasoning model for coding and agentic tasks with configurable reasoning effort.",
+            "cd_model_category": "reasoning",
+            "cd_reasoning_kind": "openai_effort",
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+                "temperature"
+            ],
+            "ds_reasoning_ladder_json": {
+                "low": {
+                    "effort": "low",
+                    "timeout_s": 60
+                },
+                "off": {
+                    "effort": null,
+                    "timeout_s": 30
+                },
+                "high": {
+                    "effort": "high",
+                    "timeout_s": 1800
+                },
+                "medium": {
+                    "effort": "medium",
+                    "timeout_s": 300
+                }
+            }
+        },
+        {
+            "n_ordo": 19,
+            "cd_model": "gpt-4.1",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-4.1",
+            "cd_provider": "openai",
+            "ds_description": "Smartest non-reasoning model.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 20,
+            "cd_model": "gpt-5.2",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-5.2",
+            "cd_provider": "openai",
+            "ds_description": "Previous frontier model for professional work with configurable reasoning effort.",
+            "cd_model_category": "reasoning",
+            "cd_reasoning_kind": "openai_effort",
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": {
+                "low": {
+                    "effort": "low",
+                    "timeout_s": 60
+                },
+                "off": {
+                    "effort": null,
+                    "timeout_s": 30
+                },
+                "high": {
+                    "effort": "high",
+                    "timeout_s": 1800
+                },
+                "medium": {
+                    "effort": "medium",
+                    "timeout_s": 300
+                }
+            }
+        },
+        {
+            "n_ordo": 21,
+            "cd_model": "gpt-5.2-pro",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-5.2 Pro",
+            "cd_provider": "openai",
+            "ds_description": "Previous pro model that produces smarter and more precise responses.",
+            "cd_model_category": "reasoning",
+            "cd_reasoning_kind": "openai_effort",
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": {
+                "low": {
+                    "effort": "low",
+                    "timeout_s": 60
+                },
+                "off": {
+                    "effort": null,
+                    "timeout_s": 30
+                },
+                "high": {
+                    "effort": "high",
+                    "timeout_s": 1800
+                },
+                "medium": {
+                    "effort": "medium",
+                    "timeout_s": 300
+                }
+            }
+        },
+        {
+            "n_ordo": 22,
+            "cd_model": "gpt-5.1",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-5.1",
+            "cd_provider": "openai",
+            "ds_description": "Best model for coding and agentic tasks with configurable reasoning effort.",
+            "cd_model_category": "reasoning",
+            "cd_reasoning_kind": "openai_effort",
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": {
+                "low": {
+                    "effort": "low",
+                    "timeout_s": 60
+                },
+                "off": {
+                    "effort": null,
+                    "timeout_s": 30
+                },
+                "high": {
+                    "effort": "high",
+                    "timeout_s": 1800
+                },
+                "medium": {
+                    "effort": "medium",
+                    "timeout_s": 300
+                }
+            }
+        },
+        {
+            "n_ordo": 23,
+            "cd_model": "gpt-5-pro",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-5 Pro",
+            "cd_provider": "openai",
+            "ds_description": "Version of GPT-5 that produces smarter and more precise responses.",
+            "cd_model_category": "reasoning",
+            "cd_reasoning_kind": "openai_effort",
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": {
+                "low": {
+                    "effort": "low",
+                    "timeout_s": 60
+                },
+                "off": {
+                    "effort": null,
+                    "timeout_s": 30
+                },
+                "high": {
+                    "effort": "high",
+                    "timeout_s": 1800
+                },
+                "medium": {
+                    "effort": "medium",
+                    "timeout_s": 300
+                }
+            }
+        },
+        {
+            "n_ordo": 24,
+            "cd_model": "o3-pro",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "o3-pro",
+            "cd_provider": "openai",
+            "ds_description": "Version of o3 with more compute for better responses.",
+            "cd_model_category": "reasoning",
+            "cd_reasoning_kind": "openai_effort",
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": {
+                "low": {
+                    "effort": "low",
+                    "timeout_s": 60
+                },
+                "off": {
+                    "effort": null,
+                    "timeout_s": 30
+                },
+                "high": {
+                    "effort": "high",
+                    "timeout_s": 1800
+                },
+                "medium": {
+                    "effort": "medium",
+                    "timeout_s": 300
+                }
+            }
+        },
+        {
+            "n_ordo": 25,
+            "cd_model": "o3",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "o3",
+            "cd_provider": "openai",
+            "ds_description": "Reasoning model for complex tasks, succeeded by GPT-5.",
+            "cd_model_category": "reasoning",
+            "cd_reasoning_kind": "openai_effort",
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": {
+                "low": {
+                    "effort": "low",
+                    "timeout_s": 60
+                },
+                "off": {
+                    "effort": null,
+                    "timeout_s": 30
+                },
+                "high": {
+                    "effort": "high",
+                    "timeout_s": 1800
+                },
+                "medium": {
+                    "effort": "medium",
+                    "timeout_s": 300
+                }
+            }
+        },
+        {
+            "n_ordo": 26,
+            "cd_model": "gpt-4.1-mini",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-4.1 Mini",
+            "cd_provider": "openai",
+            "ds_description": "Smaller, faster version of GPT-4.1.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 27,
+            "cd_model": "gpt-4o-mini",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-4o Mini",
+            "cd_provider": "openai",
+            "ds_description": "Fast, affordable small model for focused tasks.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 28,
+            "cd_model": "gpt-4",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-4",
+            "cd_provider": "openai",
+            "ds_description": "An older high-intelligence GPT model.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 29,
+            "cd_model": "gpt-5.3-chat-latest",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-5.3 Chat",
+            "cd_provider": "openai",
+            "ds_description": "GPT-5.3 Instant model used in ChatGPT.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 30,
+            "cd_model": "gpt-5.2-chat-latest",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-5.2 Chat",
+            "cd_provider": "openai",
+            "ds_description": "GPT-5.2 model used in ChatGPT.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 40,
+            "cd_model": "gpt-5.3-codex",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-5.3-Codex",
+            "cd_provider": "openai",
+            "ds_description": "Most capable agentic coding model to date.",
+            "cd_model_category": "coding",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 50,
+            "cd_model": "gpt-oss-120b",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "gpt-oss-120b",
+            "cd_provider": "openai",
+            "ds_description": "Most powerful open-weight OpenAI model, fits into an H100 GPU.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 51,
+            "cd_model": "gpt-oss-20b",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "gpt-oss-20b",
+            "cd_provider": "openai",
+            "ds_description": "Medium-sized open-weight model for low latency.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 60,
+            "cd_model": "gpt-image-2",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT Image 2",
+            "cd_provider": "openai",
+            "ds_description": "State-of-the-art image generation model.",
+            "cd_model_category": "image",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 61,
+            "cd_model": "gpt-image-1.5",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT Image 1.5",
+            "cd_provider": "openai",
+            "ds_description": "Previous image generation model.",
+            "cd_model_category": "image",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 62,
+            "cd_model": "chatgpt-image-latest",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "ChatGPT Image",
+            "cd_provider": "openai",
+            "ds_description": "Image model used in ChatGPT.",
+            "cd_model_category": "image",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 63,
+            "cd_model": "gpt-image-1-mini",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "gpt-image-1-mini",
+            "cd_provider": "openai",
+            "ds_description": "Cost-efficient version of GPT Image 1.",
+            "cd_model_category": "image",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 70,
+            "cd_model": "gpt-realtime-1.5",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "gpt-realtime-1.5",
+            "cd_provider": "openai",
+            "ds_description": "Best voice model for audio-in / audio-out.",
+            "cd_model_category": "audio",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 71,
+            "cd_model": "gpt-realtime",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "gpt-realtime",
+            "cd_provider": "openai",
+            "ds_description": "Realtime text and audio inputs and outputs.",
+            "cd_model_category": "audio",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 72,
+            "cd_model": "gpt-audio-1.5",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "gpt-audio-1.5",
+            "cd_provider": "openai",
+            "ds_description": "Best voice model for audio with Chat Completions.",
+            "cd_model_category": "audio",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 73,
+            "cd_model": "gpt-audio",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "gpt-audio",
+            "cd_provider": "openai",
+            "ds_description": "Audio inputs and outputs with Chat Completions API.",
+            "cd_model_category": "audio",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 74,
+            "cd_model": "gpt-4o-realtime-preview",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-4o Realtime",
+            "cd_provider": "openai",
+            "ds_description": "Realtime text and audio inputs and outputs.",
+            "cd_model_category": "audio",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 75,
+            "cd_model": "gpt-4o-transcribe",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-4o Transcribe",
+            "cd_provider": "openai",
+            "ds_description": "Speech-to-text model powered by GPT-4o.",
+            "cd_model_category": "audio",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 76,
+            "cd_model": "gpt-4o-mini-transcribe",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-4o Mini Transcribe",
+            "cd_provider": "openai",
+            "ds_description": "Speech-to-text model powered by GPT-4o mini.",
+            "cd_model_category": "audio",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 77,
+            "cd_model": "gpt-4o-transcribe-diarize",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "GPT-4o Transcribe Diarize",
+            "cd_provider": "openai",
+            "ds_description": "Transcription model that identifies who is speaking when.",
+            "cd_model_category": "audio",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 78,
+            "cd_model": "tts-1",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "TTS-1",
+            "cd_provider": "openai",
+            "ds_description": "Text-to-speech model optimized for speed.",
+            "cd_model_category": "audio",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 79,
+            "cd_model": "tts-1-hd",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "TTS-1 HD",
+            "cd_provider": "openai",
+            "ds_description": "Text-to-speech model optimized for quality.",
+            "cd_model_category": "audio",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 80,
+            "cd_model": "whisper-1",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "Whisper",
+            "cd_provider": "openai",
+            "ds_description": "General-purpose speech recognition model.",
+            "cd_model_category": "audio",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 90,
+            "cd_model": "text-embedding-3-large",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "text-embedding-3-large",
+            "cd_provider": "openai",
+            "ds_description": "Most capable embedding model.",
+            "cd_model_category": "embedding",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 91,
+            "cd_model": "text-embedding-3-small",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "text-embedding-3-small",
+            "cd_provider": "openai",
+            "ds_description": "Small embedding model.",
+            "cd_model_category": "embedding",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 92,
+            "cd_model": "text-embedding-ada-002",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "text-embedding-ada-002",
+            "cd_provider": "openai",
+            "ds_description": "Older embedding model, kept available for backward compatibility.",
+            "cd_model_category": "embedding",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 100,
+            "cd_model": "omni-moderation-latest",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "omni-moderation",
+            "cd_provider": "openai",
+            "ds_description": "Identify potentially harmful content in text and images.",
+            "cd_model_category": "moderation",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 10,
+            "cd_model": "google/gemma-4-26b-a4b",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "Gemma 4 26B A4B (free)",
+            "cd_provider": "openrouter",
+            "ds_description": "Instruction-tuned MoE from Google DeepMind. 25.2B total / 3.8B active per token; 256K context; multimodal text/image/video.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 11,
+            "cd_model": "google/gemma-4-31b",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "Gemma 4 31B (free)",
+            "cd_provider": "openrouter",
+            "ds_description": "Dense 30.7B multimodal model with 256K context, configurable thinking, multilingual across 140+ languages.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 12,
+            "cd_model": "nvidia/nemotron-3-super",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "NVIDIA Nemotron 3 Super (free)",
+            "cd_provider": "openrouter",
+            "ds_description": "Open hybrid Mamba-Transformer MoE; 120B params with 12B active. 1M context, multi-environment RL training.",
+            "cd_model_category": "reasoning",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 13,
+            "cd_model": "nvidia/nemotron-3-nano-30b-a3b",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Nemotron 3 Nano 30B A3B (free)",
+            "cd_provider": "openrouter",
+            "ds_description": "Small MoE for compute-efficient agentic AI. Fully open weights, datasets, recipes.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 14,
+            "cd_model": "minimax/minimax-m2.5",
+            "ds_notes": null,
+            "in_active": true,
+            "nm_display": "MiniMax M2.5 (free)",
+            "cd_provider": "openrouter",
+            "ds_description": "Productivity-focused; office-document fluency. 80.2% SWE-Bench Verified, 76.3% BrowseComp.",
+            "cd_model_category": "coding",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 20,
+            "cd_model": "anthropic/claude-3-opus",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Claude 3 Opus (via OpenRouter)",
+            "cd_provider": "openrouter",
+            "ds_description": "Anthropic Claude 3 Opus — most powerful Claude 3 model for highly complex tasks.",
+            "cd_model_category": "reasoning",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 21,
+            "cd_model": "anthropic/claude-3-sonnet",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Claude 3 Sonnet (via OpenRouter)",
+            "cd_provider": "openrouter",
+            "ds_description": "Anthropic Claude 3 Sonnet — balance of intelligence and speed for enterprise workloads.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 30,
+            "cd_model": "cohere/command-r-plus",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Cohere Command R+",
+            "cd_provider": "openrouter",
+            "ds_description": "104B parameter LLM. Multilingual, RAG-friendly, useful for general consumer and enterprise.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 31,
+            "cd_model": "cohere/command-r-plus-04-2024",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Cohere Command R+ (04-2024)",
+            "cd_provider": "openrouter",
+            "ds_description": "April 2024 snapshot of Command R+.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 32,
+            "cd_model": "cohere/command-r",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Cohere Command R",
+            "cd_provider": "openrouter",
+            "ds_description": "35B parameter conversational model with longer context; supports RAG and agents.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 33,
+            "cd_model": "cohere/command-r-03-2024",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Cohere Command R (03-2024)",
+            "cd_provider": "openrouter",
+            "ds_description": "March 2024 snapshot of Command R.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 34,
+            "cd_model": "cohere/command",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Cohere Command",
+            "cd_provider": "openrouter",
+            "ds_description": "Instruction-following conversational base model.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 40,
+            "cd_model": "databricks/dbrx-132b-instruct",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Databricks DBRX 132B Instruct",
+            "cd_provider": "openrouter",
+            "ds_description": "132B fine-grained MoE; 36B active. Trained on 12T tokens of text and code.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 41,
+            "cd_model": "meta-llama/codellama-70b-instruct",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Meta CodeLlama 70B Instruct",
+            "cd_provider": "openrouter",
+            "ds_description": "Code Llama based on Llama 2 70B; zero-shot instruction-following for programming tasks.",
+            "cd_model_category": "coding",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 42,
+            "cd_model": "mistralai/mistral-small",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Mistral Small",
+            "cd_provider": "openrouter",
+            "ds_description": "22B parameter model; mid-point between Mistral NeMo and Mistral Large. Multilingual EN/FR/DE/IT/ES.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 43,
+            "cd_model": "mistralai/mistral-medium",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Mistral Medium",
+            "cd_provider": "openrouter",
+            "ds_description": "Mistral AI mid-tier closed model; reasoning, code, JSON, chat.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 44,
+            "cd_model": "mistralai/mistral-7b-instruct-v0.2",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Mistral 7B Instruct v0.2",
+            "cd_provider": "openrouter",
+            "ds_description": "7.3B parameter model with 32K context, optimized for speed.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 50,
+            "cd_model": "01-ai/yi-34b-200k",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Yi 34B 200K",
+            "cd_provider": "openrouter",
+            "ds_description": "01.AI Yi 34B trained on long-context (~200k words combined input/output).",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 51,
+            "cd_model": "google/gemma-7b",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Gemma 7B",
+            "cd_provider": "openrouter",
+            "ds_description": "Google decoder-only text-to-text model; competitive among open 7B models.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 60,
+            "cd_model": "nousresearch/nous-hermes-2-mistral-7b-dpo",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Nous Hermes 2 Mistral 7B DPO",
+            "cd_provider": "openrouter",
+            "ds_description": "Direct Preference Optimization of OpenHermes-2.5-Mistral-7B; broad benchmark improvements.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 61,
+            "cd_model": "nousresearch/nous-hermes-2-mixtral-8x7b-dpo",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Nous Hermes 2 Mixtral 8x7B DPO",
+            "cd_provider": "openrouter",
+            "ds_description": "DPO flagship over Mixtral 8x7B; trained on 1M+ primarily GPT-4-generated entries.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 62,
+            "cd_model": "nousresearch/nous-hermes-2-mixtral-8x7b-sft",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Nous Hermes 2 Mixtral 8x7B SFT",
+            "cd_provider": "openrouter",
+            "ds_description": "Supervised-fine-tune-only variant of Nous Hermes 2 Mixtral.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 63,
+            "cd_model": "nousresearch/nous-hermes-2-yi-34b",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Nous Hermes 2 Yi 34B",
+            "cd_provider": "openrouter",
+            "ds_description": "Trained on 1M+ entries; strong general-purpose Yi 34B fine-tune.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 64,
+            "cd_model": "cognitivecomputations/dolphin-2.6-mixtral-8x7b",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Dolphin 2.6 Mixtral 8x7B",
+            "cd_provider": "openrouter",
+            "ds_description": "16K-context Mixtral fine-tune; uncensored. Requires external alignment for ethical use.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 65,
+            "cd_model": "sophosympatheia/midnight-rose-70b",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Midnight Rose 70B",
+            "cd_provider": "openrouter",
+            "ds_description": "Roleplay / storytelling-oriented merge; produces lengthy outputs by default.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 66,
+            "cd_model": "jondurbin/bagel-34b-v0.2",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Bagel 34B v0.2",
+            "cd_provider": "openrouter",
+            "ds_description": "Experimental fine-tune of Yi 34B 200k via the bagel framework; pre-DPO build.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 67,
+            "cd_model": "neversleep/noromaid-mixtral-8x7b-instruct",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "Noromaid Mixtral 8x7B Instruct",
+            "cd_provider": "openrouter",
+            "ds_description": "Roleplay-focused Mixtral fine-tune with modified Alpaca prompting.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 70,
+            "cd_model": "recursal/rwkv-v5-eagle-7b",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "RWKV v5 Eagle 7B",
+            "cd_provider": "openrouter",
+            "ds_description": "RNN-with-transformer-level performance; 1.1T tokens across 100+ languages.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        },
+        {
+            "n_ordo": 71,
+            "cd_model": "rwkv/rwkv-v5-world-3b",
+            "ds_notes": "[067 auto-deactivated: not present in openrouter.ai/api/v1/models on 2026-05-04]",
+            "in_active": false,
+            "nm_display": "RWKV v5 World 3B",
+            "cd_provider": "openrouter",
+            "ds_description": "RWKV-5 trained on 100+ world languages. RNN architecture for fast inference + low VRAM.",
+            "cd_model_category": "chat",
+            "cd_reasoning_kind": null,
+            "n_default_timeout_s": null,
+            "ds_skip_sampling_fields": [
+            ],
+            "ds_reasoning_ladder_json": null
+        }
+    ],
+    "providers": [
+        {
+            "ds_notes": "Claude family. Latest: Opus 4.7, Sonnet 4.6, Haiku 4.5.",
+            "in_active": true,
+            "cd_provider": "anthropic",
+            "ds_base_url": "https://api.anthropic.com",
+            "ds_api_key_env": "ANTHROPIC_API_KEY",
+            "ds_display_name": "Anthropic"
+        },
+        {
+            "ds_notes": "Google Generative Language API. Per-user API key auth (x-goog-api-key header). For Vertex AI use a separate provider entry with service-account credentials.",
+            "in_active": true,
+            "cd_provider": "gemini",
+            "ds_base_url": "https://generativelanguage.googleapis.com",
+            "ds_api_key_env": "GEMINI_API_KEY",
+            "ds_display_name": "Google Gemini"
+        },
+        {
+            "ds_notes": "Self-hosted runtime. Edit ds_base_url to point at a LAN host.",
+            "in_active": true,
+            "cd_provider": "ollama",
+            "ds_base_url": "http://localhost:11434",
+            "ds_api_key_env": null,
+            "ds_display_name": "Ollama (local / LAN)"
+        },
+        {
+            "ds_notes": "GPT-5.x family + o-series + image / audio / embeddings.",
+            "in_active": true,
+            "cd_provider": "openai",
+            "ds_base_url": "https://api.openai.com/v1",
+            "ds_api_key_env": "OPENAI_API_KEY",
+            "ds_display_name": "OpenAI"
+        },
+        {
+            "ds_notes": "Aggregator across many vendors. Free tier available for some models.",
+            "in_active": true,
+            "cd_provider": "openrouter",
+            "ds_base_url": "https://openrouter.ai/api/v1",
+            "ds_api_key_env": "OPENROUTER_API_KEY",
+            "ds_display_name": "OpenRouter"
+        }
+    ]
+}

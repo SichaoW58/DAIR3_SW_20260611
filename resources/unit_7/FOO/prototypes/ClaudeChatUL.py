@@ -1,3 +1,13 @@
+"""
+ClaudeChatUL.py (prototype)
+Early Claude-based PDF question-answer script. Kept for reference; the
+active suite uses single_agent_gui.py and the per-engine class files.
+
+By Juan B. Gutiérrez, Professor of Mathematics
+University of Texas at San Antonio.
+
+License: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+"""
 import anthropic
 import os
 import PyPDF2

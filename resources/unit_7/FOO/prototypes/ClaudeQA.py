@@ -1,5 +1,14 @@
+"""
+ClaudeQA.py (prototype)
+Single-shot Claude question-answer demo; kept for reference.
+
+By Juan B. Gutiérrez, Professor of Mathematics
+University of Texas at San Antonio.
+
+License: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+"""
 import anthropic
-import os 
+import os
 
 # Create the client using the API key
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))

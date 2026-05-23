@@ -1,3 +1,12 @@
+"""
+agentGroq.py (prototype)
+Early Groq + LangChain chat loop. Kept for reference; not wired into FOO.
+
+By Juan B. Gutiérrez, Professor of Mathematics
+University of Texas at San Antonio.
+
+License: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+"""
 import os
 
 from langchain.chains import LLMChain

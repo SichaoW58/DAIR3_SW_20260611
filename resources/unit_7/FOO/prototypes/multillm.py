@@ -1,3 +1,12 @@
+"""
+multillm.py (prototype)
+Tkinter-based multi-LLM chat. Predecessor to foo_gui.py. Kept for reference.
+
+By Juan B. Gutiérrez, Professor of Mathematics
+University of Texas at San Antonio.
+
+License: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+"""
 import tkinter as tk
 from tkinter import ttk
 from Agent import Agent

@@ -1,3 +1,12 @@
+"""
+generateSummaries.py (prototype)
+Batch PDF -> TextRank summary script. Kept for reference.
+
+By Juan B. Gutiérrez, Professor of Mathematics
+University of Texas at San Antonio.
+
+License: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+"""
 import os
 import json
 import PyPDF2

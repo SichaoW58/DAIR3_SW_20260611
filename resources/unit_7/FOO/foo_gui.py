@@ -26,6 +26,10 @@ from cls_foo import MultiAgentOrchestrator
 from md_widget import MarkdownTextEdit
 from md_loader import load_persona
 from file_upload_worker import FileUploadWorker, format_usage
+from cls_provider_catalog import engine_class_for, find_provider
+from cls_rag import KnowledgeBase, build_rag_prompt, render_citations
+from cls_file_router import RouteDecision, route_drop, extract_paths_from_drop
+from widgets_common import ProviderModelSelector, RAGSettingsDialog
 
 
 class BroadcastTextEdit(QTextEdit):
@@ -219,39 +223,132 @@ class AgentTab(QWidget):
 
         # Initialize UI first
         self.init_ui()
+        print(f"[tab:{self.name}] back in __init__ after init_ui", flush=True)
 
         # Print session header so the user can see which model and version
         # is behind this tab, plus when the session loaded.
         self._display_session_header()
+        print(f"[tab:{self.name}] back in __init__ after _display_session_header", flush=True)
 
         # Check if history was already loaded during agent initialization
         has_history = hasattr(agent, 'history_data') and agent.history_data.get('history')
         if has_history and len(agent.history_data['history']) > 1:
             # Display the loaded history - no introduction needed
+            print(f"[tab:{self.name}] displaying loaded history", flush=True)
             self.display_loaded_history()
             # Use QTimer to ensure gear icon removal happens after tab is fully added
             QTimer.singleShot(50, self.clear_tab_pending)
         else:
             # No history exists - this is a new chat, so introduce
+            print(f"[tab:{self.name}] introducing (no prior history)", flush=True)
             self.handle_input("Introduce yourself.")
+        print(f"[tab:{self.name}] __init__ end", flush=True)
 
-    def _provider_for(self, model_code):
-        if model_code.startswith("claude"):
-            return "Anthropic"
-        if model_code.startswith("gemini"):
-            return "Google"
-        return "OpenAI"
+    def _infer_provider_code(self):
+        """Map an agent instance to its catalog provider code via the class
+        name. Used to seed the Provider dropdown when the orchestrator hasn't
+        attached an explicit code yet."""
+        cls = type(self.agent).__name__
+        if cls.startswith("Anthropic"):
+            return "anthropic"
+        if cls.startswith("Google"):
+            return "gemini"
+        if cls.startswith("Ollama"):
+            return "ollama"
+        return "openai"
 
     def _display_session_header(self):
+        print(f"[tab:{self.name}] _display_session_header begin", flush=True)
         model_code = getattr(self.agent, "model", "?")
-        provider = self._provider_for(model_code)
-        # Friendly model_name from MODELS entry, if present.
+        provider_code = getattr(self.agent, "_provider_code", None) or self._infer_provider_code()
+        prov = find_provider(provider_code)
+        provider_label = prov.get("ds_display_name", provider_code) if prov else provider_code
         model_entry = getattr(self.agent, "model_entry", None) or {}
         friendly = model_entry.get("model_name") or model_code
         role = getattr(self.agent, "role_md", "?")
-        self.text_area.append(f"**Model:** {friendly} (`{model_code}`, {provider}) — **Loaded:** {self.loaded_at}")
-        self.text_area.append(f"**Agent:** {self.name} — **Role:** {role}")
+        self.text_area.append(f"**Model:** {friendly} (`{model_code}`, {provider_label}) - **Loaded:** {self.loaded_at}")
+        self.text_area.append(f"**Agent:** {self.name} - **Role:** {role}")
+        try:
+            # Use manifest-only counters at startup so Chroma is NOT
+            # initialized here; touching Chroma's PersistentClient on
+            # some Windows setups crashes the host process before the
+            # window can show.
+            kb_line = (
+                f"_{self.kb.backend_label()}, "
+                f"sources: {self.kb.manifest_source_count()}, "
+                f"chunks: {self.kb.manifest_chunk_count()}_"
+            )
+            self.text_area.append(kb_line)
+        except Exception:
+            pass
         self.text_area.append("<<<<<<<<<<<<<<<<<<<<<<<<<<")
+
+    def on_provider_model_changed(self, provider_code, model_code):
+        """Swap this tab's agent to a new provider/model. Conversation is
+        reset; persona/role and harmonizer flag are preserved."""
+        current_provider = getattr(self.agent, "_provider_code", None) or self._infer_provider_code()
+        if provider_code == current_provider and model_code == getattr(self.agent, "model", None):
+            return
+
+        common_md = getattr(self.agent, "common_md", "common.md")
+        role_md = getattr(self.agent, "role_md", "general.md")
+        try:
+            instructions = load_persona(common_md, role_md, {
+                "user": self.user,
+                "name": self.name,
+            })
+        except Exception as e:
+            self.text_area.append(f"**Failed to reload persona on provider switch:** {e}")
+            return
+
+        try:
+            AgentClass = engine_class_for(provider_code)
+            new_agent = AgentClass(
+                model=model_code,
+                name=self.name,
+                instructions=instructions,
+                user=self.user,
+                config=self.config,
+            )
+        except Exception as e:
+            self.text_area.append(f"**Failed to switch to {provider_code}/{model_code}:** {e}")
+            return
+
+        # Preserve cross-cutting metadata used elsewhere by the orchestrator
+        # and by other handlers (vulnerability / judgment / reflection).
+        new_agent.common_md = common_md
+        new_agent.role_md = role_md
+        new_agent.model_entry = getattr(self.agent, "model_entry", None)
+        new_agent.harmonizer = getattr(self.agent, "harmonizer", False)
+        new_agent._provider_code = provider_code
+
+        # Replace inside the orchestrator's agent list at the same index.
+        try:
+            idx = self.orchestrator.agents.index(self.agent)
+            self.orchestrator.agents[idx] = new_agent
+        except ValueError:
+            self.orchestrator.agents.append(new_agent)
+
+        self.agent = new_agent
+        self.text_area.clear()
+        self._display_session_header()
+        self.text_area.append(f"**Switched to:** {provider_code} / `{model_code}` - conversation reset.")
+        self.text_area.append("<<<<<<<<<<<<<<<<<<<<<<<<<<")
+
+    def open_rag_settings(self):
+        dlg = RAGSettingsDialog(self.name, self.kb, default_top_k=self.rag_top_k, parent=self)
+        if dlg.exec_():
+            self.rag_top_k = dlg.chosen_top_k()
+            new_backend = dlg.chosen_backend()
+            if new_backend and new_backend != self.kb.backend:
+                try:
+                    self.kb.set_backend(new_backend)
+                    self.text_area.append(
+                        f"_RAG backend set to {new_backend}; index was wiped (dimensions differ)._"
+                    )
+                except Exception as e:
+                    self.text_area.append(f"**Failed to set RAG backend:** {e}")
+            self.text_area.append(f"_{self.kb.backend_label()}_")
 
     def closeEvent(self, event):
         """Handle widget closure by stopping all worker threads"""
@@ -279,9 +376,31 @@ class AgentTab(QWidget):
             print(f"Error stopping workers for {self.name}: {e}")
     
     def init_ui(self):
+        print(f"[tab:{self.name}] init_ui begin", flush=True)
         layout = QVBoxLayout()
 
+        # Per-agent knowledge base + retrieval depth (read from main config).
+        print(f"[tab:{self.name}] creating KnowledgeBase", flush=True)
+        self.kb = KnowledgeBase(self.name)
+        self.rag_top_k = int(self.config.get("rag_top_k", 4))
+        print(f"[tab:{self.name}] KnowledgeBase OK (backend={self.kb.backend})", flush=True)
+
+        # Per-tab provider+model selector. The agent gets rebuilt when either
+        # changes (conversation resets).
+        print(f"[tab:{self.name}] constructing ProviderModelSelector", flush=True)
+        self.selector = ProviderModelSelector()
+        print(f"[tab:{self.name}] selector OK", flush=True)
+        current_provider = getattr(self.agent, "_provider_code", None) or self._infer_provider_code()
+        current_model = getattr(self.agent, "model", "")
+        print(f"[tab:{self.name}] set_selection({current_provider!r}, {current_model!r})", flush=True)
+        self.selector.set_selection(current_provider, current_model)
+        print(f"[tab:{self.name}] set_selection OK; connecting signal", flush=True)
+        self.selector.selection_changed.connect(self.on_provider_model_changed)
+        layout.addWidget(self.selector)
+        print(f"[tab:{self.name}] selector added to layout", flush=True)
+
         # Agent controls row
+        print(f"[tab:{self.name}] building controls row", flush=True)
         row = QHBoxLayout()
         self.checkbox = QCheckBox(f"Enable {self.name}")
         self.checkbox.setChecked(True)
@@ -294,6 +413,7 @@ class AgentTab(QWidget):
         row.addWidget(self.harmonizer_checkbox)
 
         # Per-tab role dropdown: switches the agent's persona at runtime.
+        print(f"[tab:{self.name}] building role combo", flush=True)
         row.addWidget(QLabel("Role:"))
         self.role_combo = QComboBox()
         self.role_combo.addItems(self._discover_md_files())
@@ -303,9 +423,20 @@ class AgentTab(QWidget):
         self.role_combo.currentTextChanged.connect(self.on_role_changed)
         row.addWidget(self.role_combo, 1)
 
+        # RAG settings (gear) for this tab's kb. Gear glyph U+2699 matches
+        # the "gear icon" wording used in cls_file_router messages and slides.
+        print(f"[tab:{self.name}] building RAG button", flush=True)
+        self.rag_btn = QPushButton("⚙ RAG")
+        self.rag_btn.setFixedWidth(75)
+        self.rag_btn.setToolTip("RAG settings: embedding backend, top-k, consent, re-index")
+        self.rag_btn.clicked.connect(self.open_rag_settings)
+        row.addWidget(self.rag_btn)
+
         layout.addLayout(row)
+        print(f"[tab:{self.name}] controls row added", flush=True)
 
         # Status row: indeterminate progress bar + status label. Hidden when idle.
+        print(f"[tab:{self.name}] building status row", flush=True)
         self.status_row = QWidget()
         status_layout = QHBoxLayout(self.status_row)
         status_layout.setContentsMargins(0, 0, 0, 0)
@@ -323,6 +454,7 @@ class AgentTab(QWidget):
         self.upload_worker = None
 
         # Text display area (renders Markdown via setMarkdown)
+        print(f"[tab:{self.name}] building text_area + user_input", flush=True)
         self.text_area = MarkdownTextEdit()
         self.text_area.setAcceptDrops(True)  # Enable drag and drop like ClaudeGUI.py
         self.text_area.dragEnterEvent = self.dragEnterEvent
@@ -336,6 +468,7 @@ class AgentTab(QWidget):
         layout.addWidget(self.user_input)
 
         # Button row
+        print(f"[tab:{self.name}] building button row", flush=True)
         button_row = QHBoxLayout()
         
         self.copy_button = QPushButton("Copy Latest Answer")
@@ -356,7 +489,8 @@ class AgentTab(QWidget):
         
         layout.addLayout(button_row)
         self.setLayout(layout)
-        
+        print(f"[tab:{self.name}] layout set; applying font size", flush=True)
+
         # Apply font sizes
         fontsize = int(self.config.get("fontsize", 10))
         for widget in [self.text_area, self.user_input, self.copy_button,
@@ -366,6 +500,7 @@ class AgentTab(QWidget):
             font = widget.font()
             font.setPointSize(fontsize)
             widget.setFont(font)
+        print(f"[tab:{self.name}] init_ui end", flush=True)
 
     def _discover_md_files(self):
         script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -412,17 +547,26 @@ class AgentTab(QWidget):
             event.ignore()
 
     def dropEvent(self, event: QDropEvent):
-        """Dropping a file on ANY tab broadcasts it to every active agent."""
-        urls = event.mimeData().urls()
-        if not urls:
+        """Dropping files on ANY tab broadcasts them to every active agent.
+        Supports multi-file drops; one drop-mode prompt covers the batch."""
+        paths = extract_paths_from_drop(event)
+        if not paths:
             return
-        file_path = urls[0].toLocalFile()
         main = self._find_main_window()
         if main is not None:
-            main.broadcast_file(file_path)
+            main.broadcast_files(paths)
         else:
-            # Fallback: just deliver to this tab's agent.
-            self.upload_file(file_path)
+            # Fallback: deliver to this tab only via the unified router.
+            decision = RouteDecision()
+            route_drop(
+                decision=decision,
+                file_paths=paths,
+                agent=self.agent,
+                knowledge_base=self.kb,
+                on_context=self.upload_file,
+                on_rag_status=lambda m: self.text_area.append(f"_{m}_"),
+                parent_widget=self,
+            )
 
     def _find_main_window(self):
         parent = self.parent()
@@ -583,27 +727,42 @@ class AgentTab(QWidget):
             print(f"Error displaying history for {self.name}: {e}")
 
     def handle_input(self, text):
-        """Handle user input to agent"""
+        """Handle user input to agent. RAG-augments the outgoing message if
+        the per-agent knowledge base has any indexed content."""
+        print(f"[tab:{self.name}] handle_input begin", flush=True)
         if not self.agent.active:
             return
-        
-        self.mark_tab_pending()  # Show gear icon when working
+
+        self.mark_tab_pending()
         self.text_area.append(f"{self.user}: {text}")
         self.text_area.append(">>>>>>>>>>>>>>>>>>>>>>>>>>")
-        
-        # Use orchestrator's blockchain-enabled messaging instead of direct agent call
+
+        outgoing = text
+        # IMPORTANT: use manifest_chunk_count, not count(). count() opens
+        # the Chroma collection (which can crash the process on Windows
+        # during ONNX/DLL load). manifest_chunk_count is pure file I/O and
+        # is the authoritative count of what *we* ingested.
+        if getattr(self, "kb", None) and self.kb.backend and self.kb.manifest_chunk_count() > 0:
+            print(f"[tab:{self.name}] kb has {self.kb.manifest_chunk_count()} chunks; running RAG query", flush=True)
+            try:
+                chunks = self.kb.query(text, top_k=self.rag_top_k)
+            except Exception as e:
+                self.text_area.append(f"_(RAG query failed: {e}. Sending without retrieval.)_")
+                chunks = []
+            if chunks:
+                self.text_area.append(render_citations(chunks))
+                outgoing = build_rag_prompt(text, chunks)
+
         parent = self.parent()
         while parent and not isinstance(parent, MultiAgentChatGUI):
             parent = parent.parent()
-        
+
         if parent and hasattr(parent, 'orchestrator'):
-            # Create and start worker thread that uses orchestrator
-            self.worker = BlockchainAgentWorker(parent.orchestrator, self.agent, text)
+            self.worker = BlockchainAgentWorker(parent.orchestrator, self.agent, outgoing)
             self.worker.result_ready.connect(self.show_response)
             self.worker.start()
         else:
-            # Fallback to direct agent call
-            self.worker = AgentWorker(self.agent, text)
+            self.worker = AgentWorker(self.agent, outgoing)
             self.worker.result_ready.connect(self.show_response)
             self.worker.start()
 
@@ -758,18 +917,22 @@ class MultiAgentChatGUI(QWidget):
     
     def __init__(self):
         super().__init__()
-        
+
         # Load configuration and initialize orchestrator
         self.master_config_path = "config.json"
+        print("[mac] load_configuration() ...", flush=True)
         self.load_configuration()
-        
+        print("[mac] load_configuration() done", flush=True)
+
         self.active_agents_working = 0
-        
-        # Initialize UI
+
+        print("[mac] init_ui() ...", flush=True)
         self.init_ui()
-        
-        # Create agent tabs
+        print("[mac] init_ui() done", flush=True)
+
+        print("[mac] create_agent_tabs() ...", flush=True)
         self.create_agent_tabs()
+        print("[mac] create_agent_tabs() done", flush=True)
 
     def load_configuration(self):
         """Load configuration from appropriate location"""
@@ -1015,9 +1178,15 @@ class MultiAgentChatGUI(QWidget):
         fontsize = int(self.orchestrator.config.get("fontsize", 10))
         self.font_size = fontsize
 
-        # Top header row: spacer + Font - / + buttons (top right)
+        # Shared drop-mode decision for the whole window. One prompt per
+        # session; the toggle in the header flips it.
+        self.route_decision = RouteDecision()
+
+        # Top header row: spacer + drop-mode toggle + Font - / + buttons.
         self.header_layout = QHBoxLayout()
         self.header_layout.addStretch()
+        self.drop_mode_btn = self.route_decision.create_toggle_button(self)
+        self.header_layout.addWidget(self.drop_mode_btn)
         self.font_dec_btn = QPushButton("-")
         self.font_dec_btn.setFixedWidth(32)
         self.font_dec_btn.clicked.connect(lambda: self.apply_font_size(self.font_size - 1))
@@ -1074,16 +1243,43 @@ class MultiAgentChatGUI(QWidget):
 
         self.setLayout(layout)
 
-    def broadcast_file(self, file_path):
-        """Send one file to every active agent's native upload pathway."""
+    def broadcast_files(self, file_paths):
+        """Route a (possibly multi-file) drop through the unified file router
+        to every active agent. The drop-mode prompt is asked once per session
+        and applies to the whole batch across all agents."""
+        import traceback
         active_tabs = [t for t in getattr(self, "agent_tabs", []) if getattr(t.agent, "active", True)]
-        if not active_tabs:
+        if not active_tabs or not file_paths:
             return
+        # Ensure the user has made a per-window choice once. Subsequent
+        # broadcasts reuse it (toggle button to flip).
+        self.route_decision.ensure_choice(self)
         for tab in active_tabs:
             try:
-                tab.upload_file(file_path)
+                route_drop(
+                    decision=self.route_decision,
+                    file_paths=file_paths,
+                    agent=tab.agent,
+                    knowledge_base=tab.kb,
+                    on_context=tab.upload_file,
+                    on_rag_status=lambda m, t=tab: t.text_area.append(f"_{m}_"),
+                    parent_widget=self,
+                )
             except Exception as e:
-                print(f"broadcast_file: error delivering to {tab.name}: {e}")
+                # Defensive: keep the GUI alive even if route_drop blows up
+                # in a way its internal handlers didn't catch. Print the
+                # full traceback so the launching terminal records it.
+                msg = f"broadcast_files: error delivering to {tab.name}: {type(e).__name__}: {e}"
+                print(msg)
+                traceback.print_exc()
+                try:
+                    tab.text_area.append(f"_{msg}_")
+                except Exception:
+                    pass
+
+    # Legacy alias preserved so any old caller still works.
+    def broadcast_file(self, file_path):
+        self.broadcast_files([file_path])
 
     def apply_font_size(self, size):
         # Propagates font size to the main window's children and every agent tab.
@@ -1108,18 +1304,25 @@ class MultiAgentChatGUI(QWidget):
 
     def create_agent_tabs(self):
         """Create tabs for each agent"""
+        import traceback as _tb
         self.agent_tabs = []
-        
         for agent in self.orchestrator.agents:
-            tab = AgentTab(agent, self.orchestrator, self.orchestrator.config)
-            # Start with gear icon - will be removed by AgentTab if history loads
-            self.tabs.addTab(tab, f"⚙ {agent.name}")
-            self.agent_tabs.append(tab)
-            
-            # Force update of tab status after a short delay to ensure proper initialization
-            from PyQt5.QtCore import QTimer
-            QTimer.singleShot(100, lambda t=tab: self.check_and_update_tab_status(t))
-    
+            try:
+                print(f"[mac] building tab for agent {agent.name} ({type(agent).__name__}) ...", flush=True)
+                tab = AgentTab(agent, self.orchestrator, self.orchestrator.config)
+                print(f"[mac] tab built for {agent.name}; adding to QTabWidget", flush=True)
+                self.tabs.addTab(tab, f"⚙ {agent.name}")
+                self.agent_tabs.append(tab)
+                from PyQt5.QtCore import QTimer
+                QTimer.singleShot(100, lambda t=tab: self.check_and_update_tab_status(t))
+                print(f"[mac] tab for {agent.name} OK", flush=True)
+            except BaseException as e:
+                print(f"[mac] FAILED building tab for {agent.name}: {type(e).__name__}: {e}", flush=True)
+                _tb.print_exc()
+                # Re-raise so the outer __main__ handler prints + the user
+                # sees a non-silent failure rather than a partially-built window.
+                raise
+
     def check_and_update_tab_status(self, tab):
         """Check if tab should have gear icon removed after initialization"""
         # If agent has history and is not currently working, remove gear icon
@@ -1136,13 +1339,11 @@ class MultiAgentChatGUI(QWidget):
             event.ignore()
 
     def dropEvent(self, event: QDropEvent):
-        """Handle file drop events - upload to current tab's agent"""
-        urls = event.mimeData().urls()
-        if urls:
-            file_path = urls[0].toLocalFile()
-            current_index = self.tabs.currentIndex()
-            if 0 <= current_index < len(self.agent_tabs):
-                self.agent_tabs[current_index].upload_file(file_path)
+        """Handle file drop on the main window chrome (outside any tab).
+        Broadcasts to every active agent through the unified router."""
+        paths = extract_paths_from_drop(event)
+        if paths:
+            self.broadcast_files(paths)
 
     def broadcast_message_text(self, text):
         """Broadcast message to all active agents"""
@@ -1463,10 +1664,33 @@ def _reset_agent_history_files(master_config_path="config.json"):
 
 
 if __name__ == "__main__":
-    if "--reset" in sys.argv or "-r" in sys.argv:
-        _reset_agent_history_files()
+    # Defensive __main__: anything that goes wrong before app.exec_() needs
+    # to print loudly to stdout. PyQt5 can silently terminate the process on
+    # uncaught exceptions in widget constructors on some Windows setups.
+    import traceback as _tb
+    try:
+        print("[startup] argv =", sys.argv, flush=True)
+        if "--reset" in sys.argv or "-r" in sys.argv:
+            _reset_agent_history_files()
 
-    app = QApplication([])
-    window = MultiAgentChatGUI()
-    window.show()
-    app.exec_()
+        print("[startup] creating QApplication", flush=True)
+        app = QApplication([])
+
+        print("[startup] constructing MultiAgentChatGUI", flush=True)
+        window = MultiAgentChatGUI()
+
+        print("[startup] calling window.show()", flush=True)
+        window.show()
+
+        print("[startup] entering app.exec_() event loop", flush=True)
+        rc = app.exec_()
+        print(f"[startup] event loop exited with code {rc}", flush=True)
+    except SystemExit as e:
+        print(f"[startup] SystemExit raised: code={e.code}", flush=True)
+        raise
+    except BaseException as e:
+        print(f"[startup] UNHANDLED {type(e).__name__}: {e}", flush=True)
+        _tb.print_exc()
+        sys.stdout.flush()
+        sys.stderr.flush()
+        raise

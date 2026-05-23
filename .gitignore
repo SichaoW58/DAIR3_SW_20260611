@@ -10,6 +10,9 @@ resources/unit_7/slides_7.1/*
 resources/unit_7/slides_7.2/*
 resources/unit_7/slides_7.3/*
 
+# FOO per-agent RAG stores (raw user documents + Chroma index)
+resources/unit_7/FOO/knowledge/
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof

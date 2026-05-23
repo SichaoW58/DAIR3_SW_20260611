@@ -1,3 +1,13 @@
+"""
+Agent.py (prototype)
+Early multi-provider agent abstraction. Kept for reference; superseded by
+cls_openai / cls_anthropic / cls_google / cls_ollama in the parent directory.
+
+By Juan B. Gutiérrez, Professor of Mathematics
+University of Texas at San Antonio.
+
+License: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+"""
 import os
 from openai import OpenAI
 import anthropic

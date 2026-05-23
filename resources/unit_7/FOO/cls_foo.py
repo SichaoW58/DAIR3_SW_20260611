@@ -18,6 +18,7 @@ from cls_openai import OpenAIAgent
 from cls_anthropic import AnthropicAgent
 from cls_blockchain import IntegrityManager
 from md_loader import load_persona, read_md_file
+from cls_provider_catalog import resolve_legacy_model, engine_class_for
 
 
 class MultiAgentOrchestrator:
@@ -77,7 +78,13 @@ class MultiAgentOrchestrator:
         """Initialize all agents from configuration"""
         common_md = self.config.get("common_md", "common.md")
         for entry in self.models:
-            model_code = entry["model_code"]
+            # Prefer the new schema (cd_model + cd_provider). Fall back to the
+            # legacy `model_code` field and the catalog's prefix-based detector
+            # so old config.json files continue to work without migration.
+            model_code = entry.get("cd_model") or entry.get("model_code")
+            provider_code = entry.get("cd_provider")
+            if not provider_code:
+                provider_code, _ = resolve_legacy_model(model_code)
             agent_name = entry["agent_name"]
             harmonizer = bool(entry.get("harmonizer", False)) if isinstance(entry.get("harmonizer", False), bool) else str(entry.get("harmonizer", "false")).lower() == "true"
 
@@ -89,32 +96,24 @@ class MultiAgentOrchestrator:
             })
 
             try:
-                if model_code.startswith("claude"):
-                    # Create Anthropic agent
-                    agent = AnthropicAgent(
-                        model=model_code,
-                        name=agent_name,
-                        instructions=agent_instructions,
-                        user=self.user,
-                        config=self.config,
-                        model_entry=entry  # NEW: Pass the full model entry
-                    )
-                else:
-                    # Create OpenAI agent
-                    agent = OpenAIAgent(
-                        model=model_code,
-                        name=agent_name,
-                        instructions=agent_instructions,
-                        user=self.user,
-                        config=self.config,
-                        model_entry=entry  # NEW: Pass the full model entry
-                    )
+                AgentClass = engine_class_for(provider_code)
+                agent = AgentClass(
+                    model=model_code,
+                    name=agent_name,
+                    instructions=agent_instructions,
+                    user=self.user,
+                    config=self.config,
+                    model_entry=entry,
+                )
 
                 # Stash persona source files + the raw model entry so the GUI
                 # can switch roles at runtime and display the friendly model name.
+                # _provider_code lets the GUI seed the Provider dropdown without
+                # re-guessing from the class name.
                 agent.common_md = common_md
                 agent.role_md = role_md
                 agent.model_entry = entry
+                agent._provider_code = provider_code
 
                 # Add harmonizer flag
                 agent.harmonizer = harmonizer
@@ -134,7 +133,7 @@ class MultiAgentOrchestrator:
                     self._migrate_agent_to_blockchain(agent)
                 
                 self.agents.append(agent)
-                print(f"Initialized agent: {agent_name} ({model_code})")
+                print(f"Initialized agent: {agent_name} ({provider_code}/{model_code})")
                 
             except Exception as e:
                 print(f"Failed to initialize agent {agent_name}: {e}")            

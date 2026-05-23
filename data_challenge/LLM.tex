@@ -442,11 +442,11 @@ You will receive an API key for OpenAI and Anthropic during our first session. Y
 
 On Windows, execute the following three commands one at a time for each API key. The example for \texttt{OPENAI\_API\_KEY} is as follows:
 
-\begin{verbatim}
-setx OPENAI_API_KEY "[sk-... API key]"
+\begin{lstlisting}[style=bashstyle]
+setx OPENAI_API_KEY "sk-... API key"
 Exit
 echo %OPENAI_API_KEY%
-\end{verbatim}
+\end{lstlisting}
 
 In the code above, replace \texttt{[sk-... API key]} with your actual API key. The first command sets the environment variable permanently for your user account. The second command closes the Command Prompt to ensure the new environment variable is registered. The third command, run in a new Command Prompt window, prints the stored value to verify it was set correctly.
 
@@ -454,21 +454,21 @@ In the code above, replace \texttt{[sk-... API key]} with your actual API key. T
 
 On Mac/Linux execute the following three commands one at a time for each API key. The example for \texttt{OPENAI\_API\_KEY} is as follows:
 
-\begin{verbatim}
-echo "export OPENAI_API_KEY='[sk-... API key]'" >> ~/.zshrc
+\begin{lstlisting}[style=bashstyle]
+echo "export OPENAI_API_KEY='sk-... API key'" >> ~/.zshrc
 source ~/.zshrc
 echo $OPENAI_API_KEY
-\end{verbatim}
+\end{lstlisting}
 
-In the code above, replace \texttt{'[sk-... API key]'} with your actual API key.
+In the code above, replace \texttt{'sk-... API key'} with your actual API key.
 
 \vs
 
 As reported by Bryan Fowler, if you experience errors trying to add your environmental variables in a Mac/Linux, the most likely problem is ownership of the \texttt{\~{}/.zshrc} file. In this case, execute
 
-\begin{verbatim}
+\begin{lstlisting}[style=bashstyle]
 sudo chown $(whoami) ~/.zshrc
-\end{verbatim}
+\end{lstlisting}
 
 And try to create the environmental variables again.
 
