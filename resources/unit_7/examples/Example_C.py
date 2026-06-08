@@ -37,6 +37,7 @@ for i in range(10):
 
 # Setup figure with two subplots
 fig, (ax_text, ax_plot) = plt.subplots(2, 1, figsize=(10, 6), gridspec_kw={'height_ratios': [2, 1]})
+fig.canvas.manager.set_window_title("Example_C")
 plt.subplots_adjust(bottom=0.3, hspace=0.5)
 fig.suptitle(r'$\alpha = 0.1$, $x_0 = 1.5$, $y_{desired} = 0.5$, $w=?$', y=0.98)
 

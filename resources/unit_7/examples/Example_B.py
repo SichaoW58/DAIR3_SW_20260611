@@ -21,7 +21,7 @@ def gradient(x):
 
 # Gradient descent parameters
 x_init = 2.5
-alpha = 0.1
+alpha = 0.01
 steps = [x_init]
 equations = []
 
@@ -37,6 +37,7 @@ for i in range(30):
 
 # Setup figure
 fig, (ax_text, ax_plot) = plt.subplots(2, 1, figsize=(10, 6), gridspec_kw={'height_ratios': [2, 1]})
+fig.canvas.manager.set_window_title("Example_B")
 plt.subplots_adjust(bottom=0.3, hspace=0.5)
 
 x_vals = np.linspace(-3, 3, 400)

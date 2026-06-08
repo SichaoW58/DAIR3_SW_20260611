@@ -26,6 +26,7 @@ dy = derivative(t)
 
 # Set up the figure and axes
 fig = plt.figure(figsize=(18, 6))
+fig.canvas.manager.set_window_title("Example_A3")
 ax1 = fig.add_subplot(131)  # Function
 ax2 = fig.add_subplot(132, polar=True)  # Speedometer
 ax3 = fig.add_subplot(133)  # Derivative plot

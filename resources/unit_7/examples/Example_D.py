@@ -21,6 +21,7 @@ alpha = 0.01
 num_iterations = 200
 
 fig = plt.figure()
+fig.canvas.manager.set_window_title("Example_D")
 
 slider_n_ax = plt.axes([0.1, 0.02, 0.35, 0.03])
 slider_m_ax = plt.axes([0.55, 0.02, 0.35, 0.03])

@@ -26,6 +26,7 @@ dy = derivative(t)
 
 # Set up the figure and axes
 fig = plt.figure(figsize=(12, 6))
+fig.canvas.manager.set_window_title("Example_A2")
 ax1 = fig.add_subplot(121)
 ax2 = fig.add_subplot(122)
 plt.subplots_adjust(bottom=0.2)
