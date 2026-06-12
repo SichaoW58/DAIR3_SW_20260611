@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+# R specific
 # History files
 .Rhistory
 .Rapp.history
@@ -21,6 +21,7 @@
 
 # RStudio files
 .Rproj.user/
+.Rproj.user
 
 # produced vignettes
 vignettes/*.html
@@ -49,14 +50,10 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 
-.Rproj.user
-*.html
-*.pdf
 Data/
 E-mails/
 Outputs/
 
-=======
 # macOS specific
 **/.DS_Store
 **/__pycache__
@@ -401,4 +398,3 @@ TSWLatexianTemp*
 # option is specified. Footnotes are the stored in a file with suffix Notes.bib.
 # Uncomment the next line to have this generated file ignored.
 #*Notes.bib
->>>>>>> origin/unit5-template

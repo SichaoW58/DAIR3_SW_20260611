@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-# Template_DAIR3
-Create a template repo for DAIR3 session
-=======
 # DAIR³: Data and AI Intensive Research with Rigor and Reproducibility
 
 The Data and AI Intensive Research with Rigor and Reproducibility (DAIR³) program is funded by Award [5R25GM151182](https://reporter.nih.gov/search/iXWJsQBsP0eWTxegRt3AzQ/project-details/11187025#history) of the National Institute of General Medical Sciences, one of the 27 institutes of the National Institutes of Health of the United States. The principal investigators are Jing Liu (University of Michigan) and Juan B. Gutiérrez (University of Texas at San Antonio).
@@ -71,4 +67,3 @@ This project is funded by the National Institutes of Health:
 ## License
 
 This project is licensed under the GNU General Public License v3.0. See [LICENSE](LICENSE) for details.
->>>>>>> origin/unit5-template
