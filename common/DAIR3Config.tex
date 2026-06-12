@@ -1,0 +1,445 @@
+%########################### Preferences #################################
+\usepackage[utf8]{inputenc} 
+% ******** booleans to define sections ***********
+\usepackage{etoolbox}
+\newcommand{\DAIR}{DAIR$^3${}}
+\ifnumequal{\DocVersion}{\DATATHON}
+{
+	\newcommand{\TheLeftHeader}{ \lhead{\includegraphics[width=1.7cm]{UTSAVectorOrange.pdf}} }
+}
+{ % Else
+	\newcommand{\TheLeftHeader}{ \lhead{\includegraphics[width=1.7cm]{UTSAVectorOrange.pdf}} }
+}
+% ********  Bibiolography  ********  
+%\usepackage[style=alphabetic,citestyle=alphabetic,sorting=nyt,sortcites=true,
+%			autopunct=true,autolang=hyphen,hyperref=true,abbreviate=false,
+%			backref=true,backend=bibtex]{biblatex}
+%\bibliography{../docs/DocBibliography}	 
+% ******** vmargin settings *********
+\usepackage{vmargin} %reduce to amount of white space on the page
+\usepackage{longtable}
+\usepackage{morefloats}
+\usepackage{amsmath,amssymb,amsfonts,textcomp}
+\usepackage{lastpage}
+\usepackage{wrapfig}
+\usepackage{listings} 
+
+%\setpapersize{letterpaper}
+\setmargins{3.5cm}%		% left edge
+		{1.5cm}%     	% top edge
+		{14.7cm}%		% text width
+		{23.42cm}%   	% text hight
+		{14pt}%			% header hight
+		{1cm}%   	  	% header distance
+		{0pt}%			% footer hight
+		{2cm}%    	  	% footer distance         
+
+% ********* Font definiton ************
+%\usepackage{t1enc} % as usual
+%\usepackage[latin1]{inputenc} % as usual
+%\usepackage{times}		
+%\usepackage{mathptmx}  	%mathematical fonts for use with times, I encountered some problems using this package togather with pdftex, which I was not able to resolve
+
+% ********* Graphics definition *******
+\usepackage{xcolor}
+\usepackage[pdftex]{graphicx} % required to import graphic files
+\graphicspath{{../common/}{../images/}}
+\usepackage{color} %allows to mark some entries in the tables with color
+\usepackage{eso-pic} % these two are required to add the little picture on top of every page
+\usepackage{everyshi} % these two are required to add the little picture on top of every page
+\renewcommand{\floatpagefraction}{0.7} %default:0.5 allows two big pictures on one page
+
+%********** Enabling landscape orientation *******
+\usepackage{rotating}
+\usepackage{pdflscape}
+
+\usepackage{tcolorbox}
+\usepackage{fontawesome5}   % optional, for icons
+
+% ********* Table layout **************
+\usepackage{booktabs}	  	%design of table, has an excellent documentation
+%\usepackage{lscape}			%use this if you want to rotate the table together with the lines around the table
+
+% ********* Caption Layout ************
+\usepackage{ccaption} % allows special formating of the captions
+\captionnamefont{\footnotesize\sffamily} % defines the font of the caption name (e.g. Figure: or Table:)
+\captiontitlefont{\footnotesize\sffamily} % defines the font of the caption text (same as above, but not bold)
+\setlength{\abovecaptionskip}{0mm} %lowers the distace of captions to the figure
+
+\usepackage{sidecap}
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathreplacing}
+
+\usetikzlibrary{arrows.meta,shapes,arrows,calc,fit,positioning}
+\tikzset{
+    -Latex,auto,node distance =1 cm and 1 cm,semithick,
+    state/.style ={ellipse, draw, minimum width = 0.7 cm},
+    point/.style = {circle, draw, inner sep=0.04cm,fill,node contents={}},
+    bidirected/.style={Latex-Latex,dashed},
+    el/.style = {inner sep=2pt, align=left, sloped}
+}
+
+\newcommand{\replacementchar}{%
+  \begin{tikzpicture}[baseline={(current bounding box.center)}]
+    \draw (0.25,0.6) -- (0.5,0.85) -- (0.25,1.1) -- (0,0.85) -- cycle; % Rhomboid shape moved up by 6pts
+    \node[font=\tiny] at (0.25,0.85) {?}; % Even smaller question mark in the center
+  \end{tikzpicture}%
+}
+
+% ============= Tables ================
+\usepackage{array}
+\usepackage{ragged2e}
+
+
+%********** Enybeling Hyperlinks *******
+\usepackage[pdftex=true]{hyperref}% this enables jumping from a reference and table of content in the pdf file to its target % pdfborder=000,
+
+
+% ********* Header and Footer **********
+% This is something to play with forever. I use here the advanced settings of the KOMA script
+%\usepackage{scrlayer-scrpage} %header and footer using the options for the KOMA script
+%\renewcommand{\headfont}{\footnotesize\sffamily} % font for the header
+%\renewcommand{\pnumfont}{\footnotesize\sffamily} % font for the pagenumbers
+
+%the following lines define the pagestyle for the main document
+%\defpagestyle{cb}{%
+%(\textwidth,0pt)% sets the border line above the header
+%{\pagemark\hfill\headmark\hfill}% doublesided, left page
+%{\hfill\headmark\hfill\pagemark}% doublesided, right page
+%{\hfill\headmark\hfill\pagemark}%  onesided
+%(\textwidth,1pt)}% sets the border line below the header
+%%
+%{
+	%(\textwidth,1pt)% sets the border line above the footer
+	%{\scshape  \hfill Rowdy Datathon 2022}% doublesided, left page
+	%{\scshape Rowdy Datathon 2022 \hfill Preliminary report}% doublesided, right page
+	%{\scshape Rowdy Datathon 2022 \hfill Preliminary report} % one sided printing
+	%(\textwidth,0pt)% sets the border line below the footer
+%}
+
+%this defines the page style for the first pages: all empty
+%\renewpagestyle{plain}%
+	%{(\textwidth,0pt)%
+		%{\hfill}{\hfill}{\hfill}%
+	%(\textwidth,0pt)}%
+	%{(\textwidth,0pt)%	
+		%{\hfill}{\hfill}{\hfill}%
+	%(\textwidth,0pt)}
+
+%********** Footnotes **********
+\renewcommand{\footnoterule}{\rule{5cm}{0.2mm} \vspace{0.3cm}} %increases the distance of footnotes from the text
+
+%Make section number before figure number.
+\renewcommand{\thefigure}{\thesection-\arabic{figure}}
+
+% Display subsections in the TOC
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+
+%################ End Preferences #####################
+
+%********** Begin Frontmatter **********
+
+\pagestyle{plain} % on headers or footers on the first page
+
+
+%########################### MACROS #################################
+
+
+%\usepackage[margin=1.2in,headsep=.5in]{geometry}
+%
+\usepackage[pages=some]{background}
+\backgroundsetup{
+	scale=1.0,color=black,opacity=1,angle=0,
+	contents={
+	\includegraphics[width=1.25\paperwidth,height=1.3\paperheight]{DatathonCover}
+	}
+}
+
+%%************************************************
+\usepackage{fancyhdr} % this is for headers and footers
+\setlength{\headheight}{16.8pt}
+\pagestyle{fancyplain}
+\fancyhf{}
+\lhead{\includegraphics[width=0.9cm]{DAIR3-290x300.png}} % \sc{UTSA}
+\rhead{\footnotesize \sc{\TheSubtitle}} 
+\setcounter{page}{1} 
+%\lfoot{\today}
+\cfoot{\sc{\scriptsize Planned Obsolescence: Discard after \TheObsolescenceDate}}
+%\rfoot{Page \thepage \hspace{0.02cm} of \ThePageCount}
+\rfoot{\thepage}
+%%************************************************
+
+% =============  Text styles ============= 
+\definecolor{Input}{rgb}{0.0,0.45,0.0} % a dark green
+\definecolor{Output}{rgb}{0.0,0.0,1.0} % blue
+\definecolor{SrcBckgrnd}{rgb}{0.95,0.95,0.95} % blue
+\definecolor{HW}{rgb}{0.8,0.0,0.0} % red
+\definecolor{UTSABlue}{rgb}{0.047,0.137,0.251} 
+\definecolor{UTSAOrange}{rgb}{0.945,0.353,0.133} 
+\newcommand\textstyleInput[1]{\texttt{\textbf{\textcolor[rgb]{0.0,0.45,0.0}{#1}}}}
+\newcommand\textstyleOutput[1]{\texttt{{\textcolor[rgb]{0.0,0.75,0.0}{#1}}}} 
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% =============  Accessible colors ================
+    \definecolor{keywordblue}{HTML}{1A4D8F}      % navy blue
+    \definecolor{stringpurple}{HTML}{6A1B9A}     % deep violet
+    \definecolor{commentgray}{HTML}{5F6368}      % neutral gray
+    \definecolor{numberorange}{HTML}{E65100}     % dark orange
+    \definecolor{background}{HTML}{F9F9F9}       % light background
+% ======= High-contrast accessible colors =======
+    \definecolor{background}{HTML}{F8F8F8}       % soft gray background
+    \definecolor{textgray}{HTML}{202124}         % near-black text
+    %\definecolor{keywordblue}{HTML}{0033A0}     % strong deep blue (keywords)
+    \definecolor{keywordblue}{HTML}{005F9E}      % lighter blue, WCAG AA+ contrast on white    
+    \definecolor{stringorange}{HTML}{D35400}     % vivid dark orange (strings)
+    \definecolor{commentteal}{HTML}{00695C}      % deep teal (comments)
+    \definecolor{commentgreen}{HTML}{3B7A57}     % medium green (safe & accessible)    
+    \definecolor{numberpurple}{HTML}{5E35B1}     % strong purple (line numbers)
+    \definecolor{functionmagenta}{HTML}{C2185B}  % magenta (function names, optional)
+    \definecolor{framegray}{HTML}{BDBDBD}        % neutral frame lines
+% ======= Assessment / Introduction category colors =======
+% Four-level priority scheme shared by Introduction.tex and Assessment.tex.
+% Colors chosen for CVD safety: distinct by hue AND luminance.
+%   Required   -- dark red    -- must complete before program begins
+%   Essential  -- navy blue   -- environment and API setup
+%   Desirable  -- forest green -- technical skill chapters
+%   Optional   -- medium gray  -- Ollama infrastructure
+\definecolor{colorRequired}{HTML}{C0392B}
+\definecolor{colorEssential}{HTML}{005F9E}
+\definecolor{colorDesirable}{HTML}{3B7A57}
+\definecolor{colorOptional}{HTML}{757575}
+
+\newcommand{\low}{\textnormal{\tiny\textit{low}}\hspace{-5pt}}
+\newcommand{\high}{\textnormal{\tiny \textit{high}}\hspace{-5pt}}
+\newcommand{\vv}{{\bf v}}
+\newcommand{\mb}{\left[\begin{matrix}}
+\newcommand{\me}{\end{matrix}\right]}
+\newcommand{\lam}{\lambda}
+\newcommand{\PP}{\hbox{I\kern-0.2em\hbox{P}}}
+\newcommand{\RR}{\hbox{I\kern-0.2em\hbox{R}}}
+\newcommand{\ZZ}{\hbox{Z\kern-0.35em\hbox{Z}}}
+\newcommand{\R}{{\mathbb{R}}}
+\newcommand{\N}{{\mathbb{N}}}
+\newcommand{\Z}{{\mathbb{Z}}}
+\newcommand{\Q}{{\mathbb{Q}}}
+\newcommand{\C}{{\mathbb{C}}}
+\newcommand{\M}{{\mathbb{M}}}
+\newcommand{\e}{\mathrm{e}}
+\newcommand{\ee}{\mathrm{e}}
+\newcommand{\mat}[1]{\bmatrix #1\endbmatrix}
+\newcommand{\sinc}{\operatorname{sinc}}
+\newcommand{\rect}{\operatorname{rect}}
+\newcommand{\conj}{\overline}
+\newcommand{\ebb}{\mathrm{\textbf{e}}}
+\newcommand{\mbb}{\textbf{m}}
+\newcommand{\y}{\textbf{y}}
+\newcommand{\x}{\textbf{x}}
+\newcommand{\X}{\textbf{X}}
+\newcommand{\z}{\textbf{z}}
+\newcommand{\A}{\textbf{A}}
+\newcommand{\Sbb}{\textbf{S}}
+\newcommand\bb{\textbf{b}}
+
+\newcommand\vs{\vspace{0.1in} \noindent}
+%\newcommand{\vs}{\vspace*{0.1in}\noindent}
+
+\newcounter{example}[section]
+\newenvironment{example}[1][]{\refstepcounter{example}\par\medskip
+   \noindent \textbf{Example~\theexample. #1} \rmfamily}{\medskip}
+
+
+
+\newcounter{QaA}
+\newenvironment{EQA}[1][]{\refstepcounter{QaA} \color{HW} Record your explanation as answer \#\theQaA. #1 }{\medskip}
+\newcommand\QA{\begin{EQA} \end{EQA}} 
+
+\input{../common/lstsetC}
+\input{../common/lstsetMATLAB}
+\input{../common/lstsetR}
+\input{../common/lstsetPython}
+
+% \usepackage{draftwatermark}
+% \SetWatermarkText{DRAFT}
+% \SetWatermarkScale{5}
+
+% ============================================================
+% Listing styles and callout boxes — accessible color palette
+% All colors reference named definitions from the preamble.
+% Verified against WCAG AA contrast on background #F8F8F8.
+%
+% Colorblindness decisions:
+%   Keywords  → keywordblue    (#005F9E)  safe for all CVD types
+%   Strings   → stringorange   (#D35400)  distinguishable from blue
+%                                         by hue AND luminance
+%   Comments  → commentgreen   (#3B7A57)  darker than typical green;
+%                                         luminance contrast >4.5:1
+%   Numbers   → numberpurple   (#5E35B1)  hue orthogonal to all above
+%   Frames    → framegray      (#BDBDBD)  neutral, no hue dependency
+%   Overflow  → numberpurple   (#5E35B1)  replaced red hook arrow;
+%               red+green pairs are the primary CVD failure mode
+% ============================================================
+
+% ---- Windows / PowerShell listing style ----------------------
+\lstdefinestyle{windowsStyle}{
+  language=,
+  basicstyle=\ttfamily\small\color{textgray},
+  backgroundcolor=\color{background},
+  keywordstyle=\bfseries\color{keywordblue},
+  commentstyle=\itshape\color{commentgreen},
+  stringstyle=\color{stringorange},
+  frame=single,
+  rulecolor=\color{framegray},
+  breaklines=true,
+  postbreak=\mbox{\textcolor{numberpurple}{$\hookrightarrow$}\space},
+  showstringspaces=false,
+  captionpos=b,
+  numbers=left,
+  numberstyle=\tiny\color{numberpurple},
+  numbersep=8pt,
+}
+
+% Alias: psstyle is windowsStyle under a descriptive name
+% used in chapters that discuss PowerShell commands explicitly.
+\lstdefinestyle{psstyle}{
+  language=,
+  basicstyle=\ttfamily\small\color{textgray},
+  backgroundcolor=\color{background},
+  keywordstyle=\bfseries\color{keywordblue},
+  commentstyle=\itshape\color{commentgreen},
+  stringstyle=\color{stringorange},
+  frame=single,
+  rulecolor=\color{framegray},
+  breaklines=true,
+  postbreak=\mbox{\textcolor{numberpurple}{$\hookrightarrow$}\space},
+  showstringspaces=false,
+  captionpos=b,
+  numbers=left,
+  numberstyle=\tiny\color{numberpurple},
+  numbersep=8pt,
+}
+
+% ---- Linux / bash listing style ------------------------------
+\lstdefinestyle{linuxStyle}{
+  language=bash,
+  basicstyle=\ttfamily\small\color{textgray},
+  backgroundcolor=\color{background},
+  keywordstyle=\bfseries\color{keywordblue},
+  commentstyle=\itshape\color{commentgreen},
+  stringstyle=\color{stringorange},
+  frame=single,
+  rulecolor=\color{framegray},
+  breaklines=true,
+  postbreak=\mbox{\textcolor{numberpurple}{$\hookrightarrow$}\space},
+  showstringspaces=false,
+  captionpos=b,
+  numbers=left,
+  numberstyle=\tiny\color{numberpurple},
+  numbersep=8pt,
+}
+
+% bashstyle: identical to linuxStyle; retained as a separate
+% name because chapters reference it explicitly.
+\lstdefinestyle{bashstyle}{
+  language=bash,
+  basicstyle=\ttfamily\small\color{textgray},
+  backgroundcolor=\color{background},
+  keywordstyle=\bfseries\color{keywordblue},
+  commentstyle=\itshape\color{commentgreen},
+  stringstyle=\color{stringorange},
+  frame=single,
+  rulecolor=\color{framegray},
+  breaklines=true,
+  postbreak=\mbox{\textcolor{numberpurple}{$\hookrightarrow$}\space},
+  showstringspaces=false,
+  captionpos=b,
+  numbers=left,
+  numberstyle=\tiny\color{numberpurple},
+  numbersep=8pt,
+}
+
+% ---- Inline / plain listing style ----------------------------
+% No syntax highlighting — used for short snippets and
+% file paths where language coloring adds no value.
+\lstdefinestyle{inlineStyle}{
+  basicstyle=\ttfamily\small\color{textgray},
+  backgroundcolor=\color{background},
+  frame=single,
+  rulecolor=\color{framegray},
+  breaklines=true,
+  showstringspaces=false,
+}
+
+% ============================================================
+% Callout boxes
+%
+% Color semantics use shape + label as the primary cue so the
+% boxes are never distinguished by hue alone (CVD-safe).
+% Each box uses a tinted version of one named color for the
+% background fill and the full named color for the frame.
+%
+% tipbox     → keywordblue   (informational)
+% notebox    → stringorange  (attention, non-critical)
+% warningbox → functionmagenta (critical / caution)
+% infobox    → commentteal   (neutral reference)
+% ============================================================
+\tcbuselibrary{skins,breakable}
+
+% Tip — informational guidance, blue family
+\newtcolorbox{tipbox}[1][]{
+  enhanced,
+  breakable,
+  colback=keywordblue!6!white,
+  colframe=keywordblue,
+  coltitle=white,
+  fonttitle=\bfseries,
+  title=Tip,
+  #1
+}
+
+% Note — requires attention but not critical, orange family
+\newtcolorbox{notebox}[1][]{
+  enhanced,
+  breakable,
+  colback=stringorange!8!white,
+  colframe=stringorange,
+  coltitle=white,
+  fonttitle=\bfseries,
+  title=Note,
+  #1
+}
+
+% Warning — critical information, magenta family
+% Magenta is chosen over red because:
+%   (a) red+green is the most common CVD failure pair and
+%       should never be used together as semantic opposites;
+%   (b) functionmagenta (#C2185B) has strong luminance contrast
+%       against white (#F8F8F8): ratio > 5:1.
+\newtcolorbox{warningbox}[1][]{
+  enhanced,
+  breakable,
+  colback=functionmagenta!6!white,
+  colframe=functionmagenta,
+  coltitle=white,
+  fonttitle=\bfseries,
+  title=Warning,
+  #1
+}
+
+% Info — neutral reference material, teal family
+\newtcolorbox{infobox}[1][]{
+  enhanced,
+  breakable,
+  colback=commentteal!6!white,
+  colframe=commentteal,
+  coltitle=white,
+  fonttitle=\bfseries,
+  title=Information,
+  #1
+}
+
+\newcommand\s{\color{Input}\ttfamily} % Code snippet. Use: {\s code here}

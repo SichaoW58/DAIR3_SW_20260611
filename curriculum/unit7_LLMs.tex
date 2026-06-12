@@ -1,0 +1,1001 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Unit 7: Large Language Models in Biomedical Research}
+\label{chap:unit7}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\textbf{Total Time: 5 hours}
+
+This unit prepares participants to use large language model (LLM)
+based AI agents as rigorous, accountable tools in biomedical data
+science research. The unit is \emph{load-bearing}: its deliverables
+are components of the 2026 Data Challenge final report. Students
+work with the same NCHS vital statistics database used throughout
+the bootcamp, using an LLM ensemble to assist with data navigation,
+methodological decision-making, grant review, and manuscript
+preparation, while maintaining human accountability for every output.
+
+Three principles organize the unit. First, invalidation
+(a framework broader than ``hallucination'' that encompasses
+factual, logical, normative, and structural breaches) is
+mathematically inevitable in any LLM-generated output; human
+verification is therefore not optional. Second, cross-agent
+critique reduces invalidation rates below what any single model
+achieves, but introduces its own ethical tradeoffs that must be
+actively managed. Third,  any
+sociodemographic variable whose encoding has changed across the
+historical record 
+carries risks of structural and normative invalidation when
+queried without contextual grounding. 
+
+%================================================================
+\section{The Ethics of AI Agents}
+\label{sec:7.1}
+%================================================================
+
+\textbf{Time: 1 hour (Instructional: 50 minutes, Protocol Construction: 10 minutes)}
+
+This lesson examines the ethical dimensions of using LLM-based AI
+agents in biomedical data science. Unlike single-turn chatbot
+interactions, agentic workflows involve planning, tool use,
+persistent memory, and multi-agent coordination, substantially
+expanding the ethical surface area of AI-assisted research.
+Students develop a framework for identifying and classifying
+invalidation risks, analyze the specific ethical challenges posed
+by historical vital statistics data with inconsistently encoded
+racial and ethnic categories, and produce a \emph{Research AI
+Governance Protocol} that governs their own use of LLM tools
+throughout Sections~\ref{sec:7.2} and~\ref{sec:7.3}.
+
+The lesson proceeds in four instructional blocks:
+
+\begin{enumerate}
+    \item \textbf{Agent architecture and expanded ethical surface
+    (15 min).} What distinguishes an AI agent from a chatbot:
+    planning, tool use, memory, and multi-agent coordination.
+    Each capability adds a distinct ethical surface. The discursive
+    network framework explains why agent-generated statements that
+    enter manuscripts acquire authority independent of their accuracy,
+    making verification a structural responsibility rather than an
+    optional quality check.
+
+    \item \textbf{Invalidation: a taxonomy broader than hallucination
+    (15 min).} The four types of invalidation (factual, logical,
+    normative, and structural) are introduced using NCHS-specific
+    examples. Factual: an LLM names a variable not present in the
+    DVS schema as a named field. Logical: an LLM recommends a rate
+    denominator inconsistent with the research question's population
+    definition. Normative: an LLM interprets racial disparities in
+    birthweight as reflecting biological differences between racial
+    groups rather than the consequences of racism. Structural: an
+    LLM queries APGAR score columns for records before 1977, when
+    those columns did not exist in the flat file. Each type requires
+    a distinct verification strategy.
+
+    \item \textbf{Sociodemographic consciousness in biomedical data science
+    (15 min).}   We explore how many sociodemographic variables are  
+    social construct with no valid biological
+    basis, but their reification in law, medicine, and data systems
+    makes it real in its consequences. Birth outcomes differ by
+    recorded race not because of intrinsic racial biology but because
+    of racism: differential access to prenatal care, chronic stress
+    from discrimination, environmental exposures in historically
+    redlined neighborhoods, and differential clinical treatment.
+
+    The specific NCHS data students are working with encodes race
+    through a system that changed across the study period. From 1969
+    through 1977, race was assigned from a fixed set (White, Black,
+    American Indian, Chinese, Japanese, Other), and for parents
+    of different recorded races the child's race followed the
+    mother's. Assignment rules were revised in 1978, inconsistently
+    across states. The ``Hispanic'' ethnic category appeared late
+    in the period and was collapsed into ``White'' in some years.
+    The \texttt{child\_race\_recode\_3} field changed its encoding
+    midway through the study period. Any LLM query about race in
+    this dataset risks producing normative invalidation by treating
+    these categories as stable, comparable, and biologically grounded
+    across the full 1969--1986 span. 
+
+    \item \textbf{Ethics checklist and governance protocol
+    construction (20 min).} The seven risk categories from the
+    ethics framework (epistemic, accountability and authorship,
+    provenance and reproducibility, confidentiality, bias and
+    fairness, security, and sustainability) are reviewed with
+    emphasis on the tradeoffs specific to this bootcamp context.
+    Multi-agent critique tradeoffs: privacy amplification, epistemic
+    homogenization, compute burden, and attribution diffusion.
+    Students construct the Research AI Governance Protocol that
+    governs their subsequent work.
+\end{enumerate}
+
+\subsection{Learning Objectives}
+
+\begin{enumerate}
+    \item Define an AI agent in terms of planning, tool use,
+    memory, and multi-agent interaction, and explain how each
+    capability expands the ethical surface area relative to
+    single-turn LLM use.
+
+    \item Apply the four-type invalidation taxonomy (factual,
+    logical, normative, and structural) to concrete scenarios
+    involving the NCHS vital statistics database, and identify
+    the appropriate verification strategy for each type.
+
+    \item Articulate why sociodemographic variables historical US
+    vital statistics data often reflect social constructs whose reification
+    has real health consequences, and explain the specific coding
+    inconsistencies in the NCHS 1969--1986 dataset that make
+    naive racial comparisons normatively invalid.
+
+    \item Construct a Research AI Governance Protocol specifying
+    provenance logging, invalidation classification, sociodemographic variable
+    handling, escalation thresholds, and a compliant disclosure
+    statement for the team's subsequent AI-assisted work.
+\end{enumerate}
+
+\subsection{Assessment Instrument}
+
+\textbf{Item 1 --- Invalidation Taxonomy Application (in-session,
+8 minutes):}
+The instructor presents four NCHS-specific LLM output scenarios,
+one per invalidation type. For each scenario, teams identify:
+(a) the invalidation type, (b) why it constitutes that type and
+not another, and (c) the verification method that would detect
+and correct it. Scenarios are drawn from realistic ensemble
+outputs on the vital statistics database.
+
+\textbf{Item 2 --- Research AI Governance Protocol
+(in-session construction, 10 minutes; referenced throughout
+Sections~\ref{sec:7.2} and \ref{sec:7.3}):}
+Each team produces a one-page governance protocol containing
+all five required components:
+\begin{enumerate}
+    \item \textbf{Provenance logging convention:} how prompts,
+    model identifiers, and timestamps will be recorded for every
+    ensemble interaction.
+
+    \item \textbf{Invalidation log format:} the template for
+    recording invalidation type, description, and resolution for
+    each detected LLM failure.
+
+    \item \textbf{Sociodemographic variable handling clause:}
+    specific commitments about how sociodemographic variables
+    with historically unstable encoding will be treated in
+    LLM queries. 
+    LLM queries involving sociodemographic variables must inject the
+    relevant coding history as context; temporal comparisons
+    of category rates require explicit justification;
+    normative claims about disparities must be flagged
+    for human review. 
+
+    \item \textbf{Escalation threshold:} the conditions under
+    which LLM output will not be used without independent
+    verification or correction (e.g., any factual claim about
+    NCHS variable definitions; any normative statement about
+    population health disparities; any generated code before
+    execution).
+
+    \item \textbf{Draft disclosure statement:} a single sentence
+    in the form specified by the ethics framework, naming tools
+    and tasks, to be finalized at the end of Section~\ref{sec:7.3}.
+\end{enumerate}
+
+The governance protocol is a live document. It is updated
+throughout Sections~\ref{sec:7.2} and~\ref{sec:7.3} as
+invalidations are encountered and resolved, and its disclosure
+statement is finalized as the unit's final deliverable.
+
+%================================================================
+\section{AI Agents for Technical Tasks}
+\label{sec:7.2}
+%================================================================
+
+\textbf{Time: 2 hours (Instructional: 40 minutes, Activity Work:
+80 minutes)}
+
+This lesson teaches students to use an LLM ensemble as a rigorous
+technical collaborator on analytical tasks grounded in the NCHS
+vital statistics database. The session has four sequential blocks.
+Block~A derives the mathematical basis for multi-agent consensus
+and produces the agent-count commitments that govern subsequent
+activities. Blocks~B, C, and~D form an analytical chain: outputs
+from each block feed the next, and their collective products are
+load-bearing components of the final data challenge report.
+
+Students enter this session with a completed model report from
+Unit~4, which documents a predictive model for the data
+challenge outcome (underweight birth rate or infant mortality
+rate by Texas county) including the feature selection memo,
+model comparison table, residual diagnostics, and limitations
+section. This report is the primary document the LLM ensemble
+will be asked to interrogate. The governance protocol
+from Section~\ref{sec:7.1} is active from the start of this
+session; every ensemble interaction concerning the Unit~4
+model is logged in the invalidation log.
+
+The governing framework is the \emph{Flaws-of-Others} (FOO)
+algorithm, in which multiple agents independently produce outputs,
+each critiques the others' responses, and a harmonizer synthesizes
+the critiques into a refined result. The minimum number of
+mutually detecting agents required to reduce the long-run
+false-statement share below a tolerance $\varepsilon$ is:
+%
+\begin{equation}
+    n_{\min} =
+    \left\lceil
+        1 + \frac{p\!\left(\dfrac{1}{\varepsilon} - 1\right) - q}{d}
+    \right\rceil
+    \label{eq:nmin}
+\end{equation}
+%
+where $p$ is the per-agent invalidation rate, $q$ is the internal
+self-repair rate ($q = 0.05$ reference value), and $d$ is the
+cross-detection probability ($d = 0.19$ reference value). Students
+use this formula to make defensible, quantitative decisions about
+ensemble size for each activity.
+
+\subsection*{Block A --- FOO Framework: Derivation and Calibration
+(20 minutes instructional)}
+
+The derivation proceeds from first principles. A single agent has
+an effective invalidation rate $p$ (combining intrinsic corruption
+and fabrication). Internal self-repair operates at rate $q$.
+Each additional cross-checking agent adds detection hazard $d$
+to the effective correction rate. The steady-state false-statement
+share with $n$ mutually detecting agents is:
+%
+\begin{equation}
+    \pi_F^{(n)} = \frac{p}{p + q + (n-1)d}
+    \label{eq:steadystate}
+\end{equation}
+%
+Setting $\pi_F^{(n)} \leq \varepsilon$ and solving for $n$ yields
+Eq.~(\ref{eq:nmin}). The invalidation floor (proved formally in the
+underlying theory) establishes that some error rate is
+mathematically inevitable in any finite-loss LLM; the FOO
+architecture is the engineering response to this impossibility
+result.
+
+Students compute $n_{\min}$ for three task categories they will
+encounter in this session using the reference values above:
+{\footnotesize
+\begin{center}
+\begin{tabular}{llccc}
+\toprule
+Task category & Example & $p$ & $\varepsilon$ & $n_{\min}$ \\
+\midrule
+Factual schema lookup & Identify correct byte range for birthweight & 0.10 & 0.10 & \emph{compute} \\
+Methodological judgment & Choose projection model
+    for county-level rates & 0.30 & 0.05 & \emph{compute} \\
+Code generation & SQL query for core
+    research question & 0.20 & 0.05 & \emph{compute} \\
+\bottomrule
+\end{tabular}
+\end{center}
+}
+%
+The computed values are entered into the governance protocol as
+the team's agent-count commitments for Blocks~B, C, and~D.
+
+\subsection*{Block B --- The Texas Births Problem (35 minutes)}
+
+Before the bootcamp, participants were asked to count live births
+in Texas in 1969 to mothers residing in Texas. Teams compare their
+answers. Historically, different correct implementations of this
+query return different counts. The task is to diagnose the source
+of disagreement using the LLM ensemble.
+
+Teams query the ensemble with the NCHS data dictionary and ask it
+to: (a)~identify every field relevant to the filter, (b)~flag
+any ambiguities in the dictionary language, and (c)~write a query
+implementing the most defensible interpretation. Teams execute
+the generated query and compare counts across the class.
+
+%The instructor then surfaces the documented sources of ambiguity:
+% the \texttt{resident} flag records whether the mother is a resident
+% of the \emph{reporting area} (not necessarily Texas); the
+% place-of-residence field encodes the mother's state; and the
+% reporting area field records where the birth was registered. A
+% count restricted to records where the birth \emph{occurred} in
+% Texas differs from one restricted to mothers \emph{residing} in
+% Texas, and both differ from one using the resident flag. The
+% ``live birth'' filter has no explicit flag; it is the absence
+% of certain mortality indicators that were encoded differently
+% across years.
+
+The deliverable is annotated, executable code (Python or SQL) that
+implements the correct filter with comments explaining each
+disambiguation decision. This code is a candidate component of
+the reproducible pipeline developed in Unit~5.
+
+\textbf{Model report critique (15 min).} Each team submits
+their Unit~4 model report to the ensemble and prompts it to
+identify any claim in the methods section that is (a)~not
+reproducible from the written description alone, (b)~in
+tension with a stated limitation, or (c)~likely to require
+verification against the NCHS data dictionary. Teams record
+each flagged claim in the invalidation log with an invalidation
+type classification from Section~\ref{sec:7.1}. For each
+factual or structural invalidation identified, teams verify
+the ensemble's critique against the Unit~4 model code before
+accepting or rejecting it. Teams that find no invalidations
+in their Unit~4 report should examine whether the ensemble
+is producing false-negative outputs (a structural invalidation
+of the ensemble itself) and document their reasoning.
+
+\subsection*{Block C --- Sociodemographic Variable
+Integrity: Instructor-Led Exploration (15 minutes)}
+
+Building directly on Section~\ref{sec:7.1}, the
+instructor demonstrates how LLM behavior differs across
+three sociodemographic variables whose encoding changed
+across the NCHS study period. 
+For each variable the instructor submits a
+common query to the ensemble, first without contextual
+grounding and then with the relevant coding history
+injected, and the class observes the difference in output.
+
+The three demonstrations pursue the same comparative
+question: does the ensemble recognize that the variable
+is historically unstable, and does it flag its own
+normative or structural claims without prompting? Race
+is the variable most likely to surface normative
+invalidation; maternal education is most likely to
+surface structural invalidation arising from changes in
+coding categories; geographic identifiers are most likely
+to surface factual invalidation arising from county
+boundary or code revisions. Together they illustrate
+that the retrieval-augmented mitigation strategy from
+Section~\ref{sec:7.1} generalizes to any variable
+with a documented encoding history.
+
+Students take notes and update the sociodemographic
+variable handling clause in their governance protocol
+based on what they observe. The take-home deliverable
+(Assessment Item~5) asks them to apply the same
+comparative analysis independently to their own
+data challenge variables.
+
+\subsection*{Block D --- Methodological Decision Support
+(60 minutes)}
+
+Teams use the ensemble to interrogate the model family choice
+documented in their Unit~4 report. The core prompt pattern
+is: present the ensemble with the Unit~4 feature set, the
+outcome distribution description, and the model comparison
+table, then ask it to (a)~identify which alternative model
+from the comparison was most appropriate given the stated
+distributional properties of the outcome, and (b)~identify
+any model family that was not evaluated in the Unit~4
+comparison but would be worth considering given the data
+structure. Teams apply Eq.~(\ref{eq:nmin}) to determine
+the appropriate ensemble size for this task. Every ensemble
+recommendation is logged and verified against the Unit~4
+model diagnostics before being accepted. If the ensemble
+recommends a model family that the student already
+evaluated and rejected in Unit~4, teams document whether
+the ensemble's reasoning accounts for the diagnostic
+evidence that motivated the rejection.
+
+\subsection{Learning Objectives}
+
+\begin{enumerate}
+    \item Derive the FOO minimum-agent formula from the steady-state
+    false-share equation and compute $n_{\min}$ for tasks of
+    varying epistemic difficulty, applying the result to make
+    quantitative ensemble-size decisions.
+
+    \item Use an LLM ensemble to navigate an ambiguous biomedical
+    data dictionary, verify outputs against the authoritative
+    database schema, and produce annotated executable code
+    that implements a defensible query with all disambiguations
+    documented.
+
+    \item Recognize temporal instability and normative invalidation
+    risk across sociodemographic variables in the NCHS dataset,
+    using sociodemographic variables 
+    and apply retrieval-augmented mitigation strategies
+    consistently across all three.
+
+    \item Produce a structured methodological consensus memo
+    evaluating competing projection approaches, with
+    FOO-calibrated confidence levels, a synthesis recommendation,
+    and a retrospective comparison to the analytic plan developed
+    in Unit~3.
+\end{enumerate}
+
+\subsection{Assessment Instrument}
+
+\textbf{Item 3 --- Verified Data Query: Texas Birth Count
+(Block~B deliverable):}
+Annotated, executable code implementing the correct Texas birth
+count filter. The annotation must explain: (a)~each filter field
+used and why, (b)~each source of ambiguity in the data dictionary
+and how it was resolved, (c)~the count produced, and (d)~at least
+one invalidation from the ensemble interaction, logged in the
+governance protocol format.
+
+\textbf{Item 4 --- Invalidation Log (cumulative across Blocks~B,
+C, and~D, and updated through Section~\ref{sec:7.3}):}
+A structured log of all LLM invalidations encountered during
+Unit~7. Each entry must record: invalidation type (factual,
+logical, normative, or structural), a one-sentence description
+of the failure, the resolution applied, and the section in which
+it occurred. The log must contain at least six entries across
+the full unit (minimum two from Section~\ref{sec:7.2}). If a
+particular invalidation type does not appear in a team's
+experience, this must be explicitly documented with a note on
+what would have caused it to appear.
+
+\textbf{Item 5 --- Sociodemographic Variable Integrity
+Memo (take-home, due before Session~7.3):}
+A written memo of three to four paragraphs treating
+sociodemographic variables comparatively. For each variable
+the memo must specify: (a)~which coding or classification
+changes affect the variable across the study period and
+their source in the data dictionary; (b)~which temporal
+comparisons are analytically valid and which are not;
+(c)~how the team's LLM queries will be structured to
+mitigate normative or structural invalidation specific
+to that variable; and (d)~the updated sociodemographic
+variable handling clause for the governance protocol,
+incorporating all variables. 
+
+\textbf{Item 6 --- Methodological Consensus Memo (Block~D
+deliverable):}
+A structured memo containing: (a)~a comparison table with one
+row per projection approach, recording ensemble consensus level
+(High/Medium/Low), key assumptions, major risks, and divergence
+points; (b)~the team's synthesis recommendation with justification;
+(c)~the FOO analysis, which approach generated the most divergent
+ensemble responses and what epistemic difficulty that signals;
+and (d)~a retrospective comparison to the analytic plan designed
+in Section~\ref{sec:3.1}, noting whether the consensus confirms,
+complicates, or challenges the earlier design choices.
+
+%================================================================
+\section{AI Agents for Grant Review and Manuscript Preparation}
+\label{sec:7.3}
+%================================================================
+
+\textbf{Time: 2 hours (Instructional: 20 minutes, Activity Work:
+100 minutes)}
+
+This session transfers the technical skills developed in
+Section~\ref{sec:7.2} to the most career-relevant applications
+of LLM-assisted research: grant review and manuscript preparation.
+Students work with canonical NIH grant proposals that include
+their actual panel summary statements, providing ground-truth
+verification for ensemble outputs. Students also prepare a
+Specific Aims page for a research proposal using Jackson Heart
+Study (JHS) data, applying the framework from
+Section~\ref{sec:7.1} to the framing of health disparity research.
+
+The governance protocol from Section~\ref{sec:7.1} remains active.
+The special confidentiality concern of Section~\ref{sec:7.3}A is
+emphasized: federal agencies prohibit uploading unpublished
+proposal text to unapproved AI systems for grant review purposes.
+The proposals used here are canonical public examples; students
+are explicitly warned that this constraint applies to any future
+peer review panel work. The invalidation log from
+Section~\ref{sec:7.2} is updated throughout.
+
+\subsection*{Block A --- NIH Grant Review with Ground-Truth
+Comparison (60 minutes)}
+
+Each team selects one canonical NIH grant proposal from the
+provided collection. These proposals are publicly available
+examples accompanied by their actual summary statements from
+review panels.
+
+\textbf{Prompt design (10 min).} Teams design separate prompts
+for each of the five NIH review criteria: Significance,
+Investigator(s), Innovation, Approach, and Environment. Each
+criterion requires different domain reasoning; a single prompt
+for all five produces superficial output. Teams apply
+Eq.~(\ref{eq:nmin}) per criterion, recognizing that Approach
+typically warrants a higher agent count than Environment.
+
+\textbf{Ensemble review (25 min).} Teams run the consensus
+pipeline across all five criteria. The governance protocol is
+active; every ensemble interaction is logged.
+
+\textbf{Comparison analysis (20 min).} Teams compare the
+ensemble's consensus review to the actual panel summary
+statement across all five criteria, recording: consensus score,
+panel score, strengths identified by each, divergence type
+(missing context, conservative bias, detected concern missed
+by panel, domain-norm gap), and agreement level.
+
+\textbf{Critical synthesis (5 min).} Teams identify three
+empirical categories from their comparison data: what the
+ensemble reliably detected, what it missed systematically, and
+what varied case by case. This analysis informs a critical
+reflection on appropriate LLM use in grant preparation.
+
+\subsection*{Block B --- JHS Specific Aims: Ensemble-Assisted
+Drafting (60 minutes)}
+
+The coordinator for JHS activities provides: a specific JHS
+research question, the relevant JHS variables, and two to three
+published JHS papers as grounding context.
+
+\textbf{Prompt construction (10 min).} Teams design a structured
+prompt that injects JHS context as a system prompt. The task
+framing is explicit: not ``write my Specific Aims'' but rather
+``given this JHS research question, this prior work, and these
+three candidate aims, evaluate which aim structure is most
+scientifically defensible and propose the structure with highest
+consensus confidence, flagging any claims about JHS data or
+methods that require independent verification against the
+provided literature.''
+
+\textbf{Ensemble drafting (25 min).} Teams run the FOO pipeline
+with JHS context. Every LLM claim about JHS data, published
+results, or methods is flagged for verification against the
+provided papers and logged in the invalidation log.
+
+\textbf{Human revision and sociodemographic framing
+review (20 min).}
+Teams revise the LLM draft, correcting all logged invalidations.
+A mandatory step: teams explicitly evaluate whether the drafted
+Specific Aims treats sociodemographic factors as social determinants of health operating through
+identifiable structural pathways rather than as fixed biological
+or demographic properties of the study population. The review must confirm
+that the framing aligns with current NIH policy on sociodemographic variables 
+in grant applications. Each revision is documented in the invalidation log.
+
+\textbf{Disclosure statement finalization (5 min).} The draft
+disclosure statement from Section~\ref{sec:7.1} is revised to
+reflect the actual scope and nature of AI assistance across all
+three sections. Teams select the appropriate disclosure level
+(minimal, standard, or detailed) and produce a finalized
+statement suitable for inclusion in a peer-reviewed publication.
+
+\subsection{Learning Objectives}
+
+\begin{enumerate}
+    \item Design criterion-specific prompts for LLM-assisted NIH
+    grant evaluation; compare ensemble outputs to actual expert
+    panel judgments; and characterize empirical patterns of
+    agreement, divergence, and systematic miss.
+
+    \item Construct an ensemble-assisted Specific Aims draft for
+    a JHS research proposal, verifying all LLM claims against
+    published JHS literature and ensuring that sociodemographic
+    factors are framed as social determinants of health operating through
+    structural pathways rather than as fixed biological or
+    demographic properties.
+
+    \item Produce a finalized disclosure statement appropriate for
+    inclusion in a peer-reviewed publication, accurately reflecting
+    the scope of AI assistance and maintaining full human
+    accountability for all outputs.
+\end{enumerate}
+
+\subsection{Assessment Instrument}
+
+\textbf{Item 7 --- NIH Grant Review Analysis (Block~A
+deliverable):}
+A structured comparison document containing: (a)~the comparison
+table across all five NIH criteria with scores, identified
+strengths, divergence types, and agreement levels; (b)~three
+empirical categories (reliable detections, systematic misses,
+and variable outcomes) derived from the comparison data with
+at least one concrete example per category; and (c)~a one-paragraph
+critical reflection on appropriate LLM use in grant preparation,
+grounded in the evidence from the comparison rather than prior
+assumptions.
+
+\textbf{Item 8 --- JHS Specific Aims Draft (Block~B deliverable):}
+A draft Specific Aims page produced through the ensemble pipeline
+and revised by the team, with: (a)~all LLM invalidations
+documented in the invalidation log with verification sources
+cited; (b)~a written  framing review note
+confirming that sociodemographic
+factors are framed as social determinants of health operating
+through structural pathways are treated consistently with the framework from
+Section~\ref{sec:7.1}, and that the overall framing is
+consistent with NIH policy; and (c)~a brief
+annotation for each aim identifying which elements are
+human-authored and which were substantially shaped by ensemble
+output, consistent with the governance protocol.
+
+\textbf{Item 9 --- Final Disclosure Statement (Block~B
+deliverable, unit-closing):}
+A single, finalized disclosure statement appropriate for inclusion
+in a methods section or acknowledgments section of a
+peer-reviewed publication. The statement must: name the tools and
+approximate versions used; specify the tasks for which AI
+assistance was employed across the full unit; describe the
+verification procedures applied; and include an explicit
+accountability statement affirming that all claims, analyses,
+and conclusions were reviewed and affirmed by the team, who
+take full responsibility for the work. The statement must also
+specify whether and how the LLM ensemble was used to review or
+revise the predictive model report produced in Unit~4, including
+a description of the verification procedure applied to ensemble
+critiques of that report. The statement must be consistent with
+the completed invalidation log.
+
+% Required packages confirmed in DAIR3Config.tex:
+% \usepackage{longtable}
+% \usepackage{booktabs}
+% \usepackage{ragged2e}
+% \usepackage{array}
+% \usepackage{pdflscape}
+
+\begin{landscape}
+
+    \section{Evaluation Rubric}
+
+    {\scriptsize
+
+    \begin{longtable}{%
+        >{\RaggedRight\arraybackslash}p{2.5cm}   % Component
+        >{\RaggedRight\arraybackslash}p{4.5cm}   % Excellent
+        >{\RaggedRight\arraybackslash}p{4.2cm}   % Good
+        >{\RaggedRight\arraybackslash}p{4.2cm}   % Satisfactory
+        >{\RaggedRight\arraybackslash}p{4.5cm}}  % Needs Improvement
+
+    \toprule
+    \textbf{Component} &
+    \textbf{Excellent (90--100\%)} &
+    \textbf{Good (80--89\%)} &
+    \textbf{Satisfactory (70--79\%)} &
+    \textbf{Needs Improvement ($<$70\%)} \\
+    \midrule
+    \endfirsthead
+
+    \toprule
+    \textbf{Component} &
+    \textbf{Excellent (90--100\%)} &
+    \textbf{Good (80--89\%)} &
+    \textbf{Satisfactory (70--79\%)} &
+    \textbf{Needs Improvement ($<$70\%)} \\
+    \midrule
+    \endhead
+
+    \midrule
+    \multicolumn{5}{r}{\textit{Continued on next page}} \\
+    \endfoot
+
+    \bottomrule
+    \endlastfoot
+
+    % -------------------------------------------------------
+    % Row 1: Invalidation Taxonomy Application (10%)
+    % Maps to Assessment Item 1 (Section 7.1)
+    % -------------------------------------------------------
+    \textbf{1.\ Invalidation Taxonomy Application}
+    \newline\textbf{(10\%)}
+    &
+    Correctly identifies all four invalidation types from the
+    presented NCHS scenarios; provides precise, specific
+    justification for each classification that demonstrates deep
+    understanding of why the type applies and not another;
+    proposes a concrete, type-appropriate verification method for
+    each scenario; connects normative invalidation to the
+    sociodemographic consciousness framework.
+    &
+    Correctly identifies most invalidation types; justifications
+    are mostly accurate with minor gaps in specificity;
+    verification methods proposed are appropriate with minor
+    omissions; some connection to normative/sociodemographic consciousness
+    dimension.
+    &
+    Identifies some invalidation types correctly but confuses
+    at least one; justifications present but imprecise or
+    incomplete; verification methods generic rather than
+    type-specific; sociodemographic consciousness connection absent or
+    superficial.
+    &
+    Fails to correctly identify multiple invalidation types or
+    conflates types; justifications missing or incorrect;
+    no meaningful verification strategies proposed; no engagement
+    with normative dimension.
+    \\
+    \midrule
+
+    % -------------------------------------------------------
+    % Row 2: Research AI Governance Protocol (15%)
+    % Maps to Assessment Item 2 (Section 7.1)
+    % -------------------------------------------------------
+    \textbf{2.\ Research AI Governance Protocol}
+    \newline\textbf{(15\%)}
+    &
+    All five required components are present, complete, and
+    specific to the NCHS/vital statistics context; provenance
+    logging convention is operationalizable as written;
+    sociodemographic variable handling clause addresses
+    coding history, temporal comparisons, and normative
+    claim flagging for sociodemographic variables as primary case and at least
+    one additional variable; escalation
+    thresholds are concrete and verifiable; disclosure statement
+    follows the prescribed format and is appropriately specific.
+    Protocol was demonstrably active and updated through
+    Sections~7.2 and~7.3.
+    &
+    All five components present; most are specific and
+    operationalizable with minor gaps; sociodemographic variable
+    handling clause addresses most key concerns; some evidence
+    of protocol use in
+    subsequent sections.
+    &
+    Most components present but one or more are generic or
+    incomplete; sociodemographic variable handling clause
+    present but does not address
+    temporal inconsistency or normative flagging substantively;
+    limited evidence of protocol use beyond Section~7.1.
+    &
+    One or more required components missing; present components
+    are too generic to operationalize; sociodemographic variable
+    handling clause absent or addresses only surface concerns;
+    protocol not
+    demonstrably used in subsequent activities.
+    \\
+    \midrule
+
+    % -------------------------------------------------------
+    % Row 3: Verified Data Query: Texas Birth Count (10%)
+    % Maps to Assessment Item 3 (Section 7.2 Block B)
+    % -------------------------------------------------------
+    \textbf{3.\ Verified Data Query: Texas Birth Count}
+    \newline\textbf{(10\%)}
+    &
+    Code is executable and produces the correct count; all
+    ambiguities in the data dictionary are identified and
+    resolved with explicit justification; annotations clearly
+    explain each filter field and each disambiguation decision;
+    at least one ensemble invalidation is documented in
+    governance-protocol format; code structure is compatible
+    with Unit~5 reproducible pipeline conventions.
+    &
+    Code is executable and produces a defensible count with
+    minor filter issues; most ambiguities identified and
+    resolved; annotations present for major decisions; at
+    least one invalidation documented.
+    &
+    Code is present but contains a filter error or produces
+    an uncorrected count; some ambiguities identified but
+    not all resolved; annotations incomplete; invalidation
+    documentation minimal.
+    &
+    Code is absent, non-executable, or implements an incorrect
+    filter without acknowledgment; ambiguities in the data
+    dictionary not identified; no invalidation documented.
+    \\
+    \midrule
+
+    % -------------------------------------------------------
+    % Row 4: Unit 4 Model Report Critique (10%)
+    % Maps to Section 7.2 Block B model report critique sub-task
+    % -------------------------------------------------------
+    \textbf{4.\ Unit~4 Model Report Critique}
+    \newline\textbf{(10\%)}
+    &
+    Ensemble critique is elicited with a well-designed prompt that
+    directs attention to reproducibility, internal consistency, and
+    data dictionary alignment; all flagged claims are classified
+    by invalidation type with specific justification; each
+    factual or structural invalidation is verified against
+    Unit~4 code before acceptance; at least one false-negative
+    or false-positive ensemble output is identified and
+    documented in governance-protocol format; the invalidation
+    log is updated consistently.
+    &
+    Critique prompt is adequate; most flagged claims classified
+    by type with reasonable justification; verification performed
+    for most invalidations; invalidation log updated.
+    &
+    Critique prompt is generic or insufficiently specific to
+    the Unit~4 report; classification of flagged claims
+    by type is partial or inconsistent; verification
+    performed for some invalidations; log updated
+    incompletely.
+    &
+    No critique prompt submitted, or critique not connected
+    to the Unit~4 report; no classification by invalidation
+    type; no verification against Unit~4 code; invalidation
+    log not updated.
+    \\
+    \midrule
+
+    % -------------------------------------------------------
+    % Row 5: Invalidation Log (10%)
+    % Maps to Assessment Item 4 (Sections 7.2 and 7.3)
+    % -------------------------------------------------------
+    \textbf{5.\ Invalidation Log}
+    \newline\textbf{(10\%)}
+    &
+    Log contains at least six entries across the full unit with
+    at least two from Section~7.2; all four invalidation types
+    are represented or absent types are explicitly accounted for
+    with a note on what would cause each to appear; every entry
+    includes type, description, resolution, and section; log is
+    consistent with the governance protocol format and with the
+    disclosure statement.
+    &
+    Log contains at least six entries; most types represented
+    or accounted for; most entries complete; minor inconsistency
+    with governance protocol format.
+    &
+    Log contains fewer than six entries or multiple entries are
+    incomplete; at least two invalidation types present;
+    some entries lack type, description, or resolution.
+    &
+    Log contains fewer than three entries; entries are incomplete
+    or mis-classified; absent types not accounted for; log
+    is not consistent with governance protocol.
+    \\
+    \midrule
+
+    % -------------------------------------------------------
+    % Row 6: Sociodemographic Variable Integrity Memo (10%)
+    % Maps to Assessment Item 5 (Section 7.2 Block C)
+    % -------------------------------------------------------
+    \textbf{6.\ Sociodemographic Variable
+    Integrity Memo}
+    \newline\textbf{(10\%)}
+    &
+    Memo addresses all sociodemographic variables with
+    data-dictionary-grounded analysis; for each variable,
+    temporal validity is specified with reference to the
+    documented coding changes; LLM query mitigation strategy
+    is concretely articulated per variable; governance
+    protocol clause is updated and consistent across all
+    three; sociodemographic variables are addressed with comparable
+    analytical specificity.
+    &
+    All three variables addressed with mostly adequate
+    grounding; temporal validity discussed with minor gaps
+    for one variable; mitigation strategies present but not
+    fully operationalized for all three; protocol clause
+    updated; sociodemographic variables treatment mostly sound.
+    &
+    All three variables named but treatment is uneven;
+    temporal validity addressed for sociodemographic variables but not fully for
+    the other two; mitigation strategies generic rather than
+    variable-specific; protocol clause minimally updated.
+    &
+    One or more variables absent or addressed without
+    data-dictionary grounding; temporal coding inconsistency
+    not addressed for at least one variable; no
+    variable-specific mitigation strategy; sociodemographic
+    variables treated as stable, ahistorical categories
+    without acknowledgment of encoding changes.
+    \\
+    \midrule
+
+    % -------------------------------------------------------
+    % Row 7: Methodological Consensus Memo (10%)
+    % Maps to Assessment Item 6 (Section 7.2 Block D)
+    % -------------------------------------------------------
+    \textbf{7.\ Methodological Consensus Memo}
+    \newline\textbf{(10\%)}
+    &
+    Comparison table is complete for all three approaches with
+    accurate, specific entries for consensus level, assumptions,
+    risks, and divergence points; synthesis recommendation is
+    well-reasoned and explicitly connected to the data challenge
+    context; FOO analysis identifies the most epistemically
+    difficult approach and explains why divergence signals this;
+    retrospective comparison to the Unit~3 analytic plan is
+    substantive and either confirms or productively complicates
+    the earlier design.
+    &
+    Table complete with mostly accurate entries; synthesis
+    recommendation reasonable with adequate justification; FOO
+    analysis present but lacks depth; retrospective comparison
+    to Unit~3 present with minor gaps.
+    &
+    Table incomplete or contains inaccuracies for one approach;
+    synthesis recommendation present but weakly justified;
+    FOO analysis minimal; retrospective comparison to Unit~3
+    superficial or absent.
+    &
+    Table missing one or more approaches or largely inaccurate;
+    no synthesis recommendation or recommendation is unjustified;
+    FOO analysis absent; no retrospective connection to Unit~3.
+    \\
+    \midrule
+
+    % -------------------------------------------------------
+    % Row 8: NIH Grant Review Analysis (10%)
+    % Maps to Assessment Item 7 (Section 7.3 Block A)
+    % -------------------------------------------------------
+    \textbf{8.\ NIH Grant Review Analysis}
+    \newline\textbf{(10\%)}
+    &
+    Comparison table covers all five criteria with accurate,
+    evidence-grounded entries; three empirical categories
+    (reliable detections, systematic misses, variable outcomes)
+    are clearly distinguished with at least one concrete example
+    each; critical reflection is grounded in comparison evidence
+    rather than prior assumptions and reaches a nuanced,
+    defensible conclusion about appropriate LLM use in grant
+    preparation.
+    &
+    Table covers all five criteria with mostly accurate entries;
+    three categories identified with examples, some less
+    concrete; reflection grounded in evidence with minor gaps
+    in nuance.
+    &
+    Table covers most criteria; categories identified but
+    blurred or with weak examples; reflection present but
+    relies on assertion more than evidence.
+    &
+    Table incomplete or inaccurate for multiple criteria;
+    categories not meaningfully distinguished; reflection
+    absent or disconnected from comparison evidence.
+    \\
+    \midrule
+
+    % -------------------------------------------------------
+    % Row 9: JHS Specific Aims Draft (10%)
+    % Maps to Assessment Item 8 (Section 7.3 Block B)
+    % -------------------------------------------------------
+    \textbf{9.\ JHS Specific Aims Draft}
+    \newline\textbf{(10\%)}
+    &
+    Draft is complete (opening paragraph, three aims, closing
+    paragraph); all LLM invalidations are logged with
+    verification sources; sociodemographic review note confirms
+    appropriate social-determinant framing and NIH policy
+    alignment with specific evidence from the draft;
+    annotation accurately distinguishes human-authored from
+    ensemble-shaped elements; draft is scientifically coherent
+    and grounded in the provided JHS literature.
+    &
+    Draft is mostly complete; most invalidations logged with
+    sources; sociodemographic framing mostly appropriate with
+    minor lapses; annotation present with minor gaps; draft
+    is scientifically reasonable.
+    &
+    Draft has structural gaps (missing aim or section);
+    invalidation log incomplete or sources missing; sociodemographic  
+    framing partially addressed without explicit
+    review note; annotation minimal.
+    &
+    Draft is incomplete or incoherent; invalidation log
+    absent or has fewer than two entries; no sociodemographic 
+    review performed; no annotation distinguishing human
+    from ensemble contributions.
+    \\
+    \midrule
+
+    % -------------------------------------------------------
+    % Row 10: Final Disclosure Statement (5%)
+    % Maps to Assessment Item 9 (Section 7.3 Block B, closing)
+    % -------------------------------------------------------
+    \textbf{10.\ Final Disclosure Statement}
+    \newline\textbf{(5\%)}
+    &
+    Statement names tools and approximate versions; accurately
+    specifies the tasks for which AI assistance was employed
+    across all three sections; describes the verification
+    procedures applied in terms consistent with the
+    invalidation log; includes an explicit accountability
+    statement affirming full human responsibility; is appropriate
+    for inclusion in a peer-reviewed methods or acknowledgments
+    section without revision.
+    &
+    Statement names tools and tasks with minor omissions;
+    verification procedures described at a general level;
+    accountability statement present; suitable for publication
+    with minor editing.
+    &
+    Statement present but omits tools or tasks; verification
+    described only vaguely; accountability statement present
+    but formulaic; would require substantial editing for
+    publication.
+    &
+    Statement absent, or present but does not name tools,
+    tasks, or verification; no accountability statement;
+    not suitable for publication in any form.
+    \\
+
+    \end{longtable}
+
+    } % end \footnotesize
+
+\end{landscape}

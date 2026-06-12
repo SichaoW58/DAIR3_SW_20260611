@@ -1,0 +1,3 @@
+group,median_years_education,n_used,n_excluded,censored_at_17
+White,11.95858229193429,935068,567397,False
+"Black (NCHS ""Negro"")",11.310907407407408,158447,108323,False
