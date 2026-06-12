@@ -1,0 +1,32 @@
+<svg viewBox="0 110 600 115" xmlns="http://www.w3.org/2000/svg">
+  <!-- Raw Data (cloud shape) -->
+  <path d="M80 150 C60 130, 40 140, 50 160 C30 170, 40 190, 60 185 C50 200, 70 210, 90 200 C110 215, 140 210, 150 190 C170 200, 190 185, 180 165 C200 150, 180 130, 160 140 C150 120, 120 125, 100 140 C90 125, 70 135, 80 150 Z" 
+        fill="#E3F2FD" 
+        stroke="#1976D2" 
+        stroke-width="2"/>
+  
+  <!-- Raw Data text -->
+  <text x="115" y="173" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#1976D2">Raw Data</text>
+  
+  <!-- Arrow from Raw Data to Nice Features -->
+  <defs>
+    <marker id="arrowhead1" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+    </marker>
+  </defs>
+  
+  <line x1="200" y1="171" x2="320" y2="171" stroke="#333" stroke-width="2" marker-end="url(#arrowhead1)"/>
+  
+  <!-- Nice Features (rectangle) -->
+  <rect x="340" y="135" width="120" height="60" 
+        fill="#F3E5F5" 
+        stroke="#7B1FA2" 
+        stroke-width="2" 
+        rx="5"/>
+  
+  <!-- Nice Features text -->
+  <text x="400" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#7B1FA2">Nice Features</text>
+  
+  <!-- Process label -->
+  <text x="260" y="160" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#666">Feature Engineering</text>
+</svg>

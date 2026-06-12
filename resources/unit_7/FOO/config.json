@@ -1,0 +1,84 @@
+{
+    "CONFIG": {
+        "common_md": "common.md",
+        "default_provider": "openai",
+        "default_model": "gpt-5.5",
+        "claude_model": "claude-opus-4-7",
+        "google_model": "gemini-2.5-flash",
+        "ollama_model": "llama3.1",
+        "model": "gpt-5.5",
+        "name": "Tobby",
+        "user": "Dr. G",
+        "fontsize": 12,
+        "rag_top_k": 4,
+        "rag_default_backend": "openai",
+        "blockchain_salt": "c59b1ef3a98826ec"
+    },
+    "MODELS": [
+        {
+            "cd_provider": "openai",
+            "cd_model": "gpt-5.5",
+            "model_code": "gpt-5.5",
+            "model_name": "OpenAI GPT-5.5",
+            "temperature": 0.1,
+            "max_completion_tokens": 5000,
+            "agent_name": "Hermione",
+            "instructions_file": "harmonizer.md",
+            "harmonizer": "true",
+            "harmonizer_directive_file": "harmonizer.md",
+            "agent_directive": ""
+        },
+        {
+            "cd_provider": "openai",
+            "cd_model": "gpt-5.5",
+            "model_code": "gpt-5.5",
+            "model_name": "OpenAI GPT-5.5",
+            "temperature": 0.1,
+            "max_completion_tokens": 5000,
+            "agent_name": "Gabriella",
+            "instructions_file": "researcher.md",
+            "harmonizer": "false",
+            "harmonizer_directive_file": "",
+            "agent_directive": ""
+        },
+        {
+            "cd_provider": "openai",
+            "cd_model": "gpt-5.5",
+            "model_code": "gpt-5.5",
+            "model_name": "OpenAI GPT-5.5",
+            "temperature": 0.9,
+            "max_completion_tokens": 5000,
+            "agent_name": "Gerardo",
+            "instructions_file": "researcher.md",
+            "harmonizer": "false",
+            "harmonizer_directive_file": "",
+            "agent_directive": ""
+        },
+        {
+            "cd_provider": "anthropic",
+            "cd_model": "claude-opus-4-7",
+            "model_code": "claude-opus-4-7",
+            "model_name": "Anthropic Claude Opus 4.7",
+            "temperature": 0.1,
+            "max_completion_tokens": 5000,
+            "agent_name": "Claudius",
+            "instructions_file": "researcher.md",
+            "harmonizer": "false",
+            "harmonizer_directive_file": "",
+            "agent_directive": ""
+        },
+        {
+            "cd_provider": "anthropic",
+            "cd_model": "claude-opus-4-7",
+            "model_code": "claude-opus-4-7",
+            "model_name": "Anthropic Claude Opus 4.7",
+            "temperature": 0.9,
+            "max_completion_tokens": 5000,
+            "agent_name": "Claudette",
+            "instructions_file": "researcher.md",
+            "harmonizer": "false",
+            "harmonizer_directive_file": "",
+            "agent_directive": ""
+        }
+    ]
+}

@@ -1,0 +1,7 @@
+numpy==2.2.5
+pandas==2.2.3
+plotly==6.6.0
+scikit-learn==1.8.0
+jupyter==1.1.1
+nbconvert==7.16.6
+ipykernel==7.2.0
