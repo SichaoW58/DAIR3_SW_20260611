@@ -1,0 +1,74 @@
+---
+title: "Folder setup for CVM"
+format: html
+editor: visual
+---
+
+This quarto file is meant to set up the essential folders and copy the template to start the project.
+
+This is the 3rd step of the workflow:
+
+3rd step: create folders/subfolders
+
+```{r}
+#| label: load-packages
+#| include: false
+
+## file folder setup
+library(fs)   # creat folder dir_create()
+library(here) # easy to do cross reference in the project.
+
+```
+
+```{r}
+#| label: setup-folder
+#| include: false
+
+# create the default folder/subfolder, If folders already exist, it won't run.
+
+dir_create(here("Data"))  # store source data, clean data. 
+dir_create(here("Data/Source"))  
+dir_create(here("Data/Clean")) 
+
+dir_create(here("Documents"))  # all the docs
+dir_create(here("Code"))       # r code
+dir_create(here("Outputs"))    #outputs
+dir_create(here("Emails"))    # correspondence
+
+
+
+file_copy("C:/Users/wangsic1/OneDrive - Michigan State University/CSTAT main/Template/Quarto template for CVM/A template_IDA/idatemplate.qmd", here("Code/analysis_ida.qmd"), overwrite = FALSE)
+
+# "P:\\\THAA\\"
+
+# The first argument is the existing setup file:
+"C:/Users/wangsic1/OneDrive - Michigan State University/CSTAT main/Template/Quarto template_THAA_6_30_2023.qmd"
+
+# The second argument is the new folder it put in and give a proper new name for the analysis file:
+
+#here("Code/analysis_test.qmd")
+
+
+# Then we adding the branding part css,etc.
+file_copy("C:/Users/wangsic1/OneDrive - Michigan State University/CSTAT main/Template/Quarto template for CVM/A template_IDA/logo_MSU_CSTAT.png", here("Code/logo_MSU_CSTAT.png"), overwrite = FALSE)
+
+file_copy("C:/Users/wangsic1/OneDrive - Michigan State University/CSTAT main/Template/Quarto template for CVM/A template_IDA/idastyle.css", here("Code/idastyle.css"), overwrite = FALSE)
+
+file_copy("C:/Users/wangsic1/OneDrive - Michigan State University/CSTAT main/Template/Quarto template for CVM/A template_IDA/references.bib", here("Code/references.bib"), overwrite = FALSE)
+
+
+file_copy("C:/Users/wangsic1/OneDrive - Michigan State University/CSTAT main/Template/Quarto template for CVM/A template_IDA/IDAchecklist_cross.pdf", here("Documents/IDAchecklist_cross.pdf"), overwrite = FALSE)
+
+file_copy("C:/Users/wangsic1/OneDrive - Michigan State University/CSTAT main/Template/Quarto template for CVM/A template_IDA/IDAchecklist_long.pdf", here("Documents/IDAchecklist_long.pdf"), overwrite = FALSE)
+
+
+
+# dir_ls()    # briefly check
+# dir_tree()  # Show the tree, not necessary, takes time.
+# dir_tree("Data")
+
+```
+
+Now, we complete the setup of a new project.
+
+You may want to delete the extra files, which I am not able to exclude currently. (looking for some solution).

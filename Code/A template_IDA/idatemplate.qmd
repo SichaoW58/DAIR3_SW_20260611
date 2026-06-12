@@ -1,0 +1,640 @@
+---
+title: "C1000: Short title"
+author: 
+  - name: Name
+    email: email@msu.edu
+    degrees: PhD
+    orcid: 0000-0003-0931-7883
+    affiliations: 
+      - name: Michigan State University, Center for Statistical Training and Consulting
+date: "`r format(Sys.time(), '%Y-%m-%d, %H:%M:%S %Z')`"
+title-block-banner: "#01665e"
+format: 
+  html: 
+    toc: true 
+    toc-depth: 4
+    toc-location: left 
+    toc-title: Table of contents
+    number-sections: true
+    number-depth: 4
+    code-fold: false 
+    code-tools: false 
+    embed-resources: true 
+    theme: default 
+css: idastyle.css
+execute: 
+  eval: true 
+  echo: false #fenced
+  output: true 
+  message: false 
+  warning: false 
+  error: false 
+  include: true 
+knitr:
+  opts_chunk:
+    out.width: "150%"
+bibliography: references.bib
+editor:
+  markdown:
+    wrap: sentence
+---
+
+
+# Project Overview:
+
+**Title: Full title**
+
+**Project PI's:**
+
+<p>
+
+-   Name1 (email1\@msu.edu)
+-   Name2 (email2\@msu.edu)
+
+</p>
+
+<h3>Data sets</h3>
+
+
+
+</p>
+ 
+<h3>Primary Objective:</h3>
+ 
+<p>**The objective of this study is ...**</p>
+
+<h3>Secondary Objective:</h3>
+ 
+<p>
+ 
+1.  **Objective 1**
+2.  ~~Objective 2~~ [Variable `var` is missing]{style="color:red;"}
+
+
+</p>
+ 
+<h3>References:</h3>
+ 
+Initial data analysis: @tsr2022, @idacheck2024 and @idacheck2024B.
+ 
+ 
+::: {.callout-note title="Project Updates" collapse="false"}
+-   Date 1: Per email from … decision
+-   Date 2: Per meeting … decision
+:::
+
+
+Updates detail on DATE:
+
+-   [Update:]{style="color:green;"} In @sec-idamissing something was added.
+
+
+```{r}
+#| label: load-packages
+#| include: false
+
+pacman::p_load(## file folder setup
+               fs,   # creat folder dir_create()
+               here, # easy to do cross reference in the project.
+               
+               ## Data step
+               readr,
+               readxl, # read_excel()
+               tidyverse,
+               janitor,
+               stringr,
+               
+               ## IDA
+               Hmisc,
+               naniar, ## for missing data 
+               VIM, ## for missing data 
+               
+               ## Model
+               meta,
+               metafor,
+               dmetar, #for find.outliers()
+               lme4,
+               glmmTMB,
+               broom,
+               emmeans,
+               survival,
+               performance,
+               
+               ##repeatibility
+               irr,# for agreement
+               psych,# for agreement
+               confintr,#for ci_cor()
+               DescTools,
+               
+               
+               ## result reporting
+               ### graph
+               ggplot2,
+               survminer,
+               gridExtra,
+               ggpubr,# for cowplot and plotgrid
+               ### table
+               gt,
+               gtsummary,
+               knitr,        # for kable()
+               sjPlot,      # tab_model()
+               gtExtras,# for get table theme like gt_theme_538()
+               patchwork
+               )
+
+
+set.seed(42004063)
+
+
+
+###################### color scales
+
+gg_color_hue <- function(n) {
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
+}
+
+colshue = gg_color_hue(10)
+
+#plot(1:10, pch = 16, cex = 2, col = colshue)
+
+library(scales)
+hex <- hue_pal()(6)
+
+
+###### colorblind colors
+
+# colorbrewer
+colsbrewer=c("#8c510a", "#d8b365", "#5ab4ac", "#01665e")
+
+# Okabe-Ito
+cols10<-c("#E69F00","#0072B2","#D55E00","#009E73","#F5C710","#56B4E9","#CC79A7","#999999","#000000","#01665e")
+
+
+
+#https://cran.r-project.org/web/packages/colorBlindness/vignettes/colorBlindness.html
+
+```
+
+```
+
+
+```{r}
+#| label: setup-folder
+#| eval: false
+ 
+# Create the default folder/subfolder. Only needs to be done once.
+ 
+dir_create(here("Data"))  # store raw data, clean data.
+dir_create(here("Data/Source")) 
+dir_create(here("Data/Clean"))
+ 
+dir_create(here("Documents"))  # all the docs
+dir_create(here("Code"))       # r code
+dir_create(here("Emails"))    # correspondence
+ 
+# Declare location of this script relative to the project root directory.
+here::i_am(path = "Code/idatemplate.qmd")  #save the qmd under code first and then run this line.
+ 
+# dir_ls()    # briefly check
+# dir_tree()  # Show the tree, not necessary, takes time.
+# dir_tree("Data")
+ 
+```
+ 
+```{r}
+#| label: import-data
+#| eval: false
+ 
+# This section is for reading the raw data, do some preprocessing steps (e.g. new variable definitions).
+# Then cleaned data will be saved as rds.
+# Only needs to be done once.
+
+
+
+
+# Example of preprocessing
+
+### 1st Step ###---: import dataset and clean column names.
+
+df0 <- read_excel(here("Data/Raw/datname.xlsx"), 
+    sheet = "Sheet1",na = c("","NA")) %>% 
+  clean_names() %>% 
+  remove_empty(which = c("rows", "cols"), cutoff = 1, quiet = TRUE) %>% 
+  rename(comorb.other=other,readmit_date=readmit) 
+
+# base funtion make.names(casefold(names(df)), allow_=FALSE) works the same as clean_names to make names lower case, advantage is less dependency.
+
+
+### 2nd step ###---: examine variables
+
+# str(df) #check the nature of variables # I am happy with the date variables, numeric variables. character variables need to convert to factors.
+# describe(df) # check levels of character vars
+
+
+### 3rd Step ###---: recode of variables
+
+df1 <- df0 |>     
+  # first change x to 1 to indicate yes
+  mutate(across(.cols = c("htn" , "dm","cardiac", "copd"),
+                .fns = ~case_when(.x == "x" ~ "1",
+                       TRUE ~"0"))) |>   # change  NA to 0
+  mutate(variable1 =case_when(variable1=="Yes"~"yes",
+                   is.na(variable1)~"no",
+                          TRUE ~variable1), # change values
+  variable2 = tolower(variable2)) |> 
+  mutate_if(is.character, tolower) |> # to remove inconsistency due to upper/lower cases
+  mutate_if(is.character, as.factor) 
+
+### 4th Step ###---: define new variables. 
+
+df2 <- df1 |>
+  mutate(var1_numeric=as.numeric(as.character(var1)), 
+         var1_factor=factor(ifelse(as.character(var1) != "lp","not_lp","lp"),level=c("not_lp","lp")), # make sure preserve NA sum(is.na(df2$var1_factor))
+         number_var2_numeric=as.numeric(as.character(var2)),
+         number_var2_factor=factor(ifelse(as.character(var2)!="lp","not_lp","lp"),level=c("not_lp","lp")),
+         number_var2=fct_relevel(var2,"lp", "1","2","≥3"),
+         var2=fct_relevel(number_abscesses,"lp", "1","2","3"),
+         t2readmit=as.numeric(difftime(readmit_date,date_of_discharge,units="day")),
+         readmit=factor(ifelse(is.na(readmit_date),"no","yes"))),
+  mutate(a_vs_b=ifelse(a=="val1","a","b")) |> 
+  mutate(dc_abx=case_when(
+     dc_abx=="med1" & oral_iv=="po"~ "med1",
+     dc_abx=="med2" & oral_iv=="po" ~ "med2",
+     is.na(dc_abx) ~ NA,
+     .default = "other"
+    )) |> 
+    
+# Check results of this code and make comments here 
+  
+# e.g. examine cross tables of derived and original categorical variables
+# e.g. do calculated time differences correspond to variables in dataset?
+  
+  
+### 5th Step ###---: deselect variables that are not needed for analysis 
+
+df_clean <- df2 |> select(-mrn,-name)
+
+
+## Save dataset (possible multiple datasets) after data preparation. 
+# Only needs to be done once.
+ 
+saveRDS(df_clean, file = here("Data/Clean/datname.rds"))
+
+```
+ 
+
+ 
+ 
+```{r}
+#| label: ida-load-cleandata
+#| include: false
+ 
+df_ida <- readRDS(here("Data/Clean/datname.rds"))
+ 
+ 
+# str(df_ida)
+
+```
+ 
+ 
+```{r}
+#| label: ida-variables-grouping
+#| include: false
+
+
+ 
+# This section meant to group variables according to their purpose in the analysis or defined by client.
+ 
+demog_vars<-c()
+lab_vars<-c()
+explan_vars<-c()
+outcome_vars<-c()
+time2event_vars<-c()
+date_vars<-c()
+ 
+```
+
+
+
+
+
+# Initial Data Analysis (IDA)
+
+The aim of IDA is to examine data properties to ensure transparency and integrity of preconditions to conduct appropriate statistical analyses and correct interpretation of the results to answer pre-defined research questions. 
+
+**Some Notes about data:** 
+
+-   Note 1
+-   Note 2
+
+
+
+ 
+## IDA: Participation profile {#sec-participation}
+ 
+* Provide number of time points and intervals at which measurements are taken, using the time metric that best reflects the time of inclusion in the study. 
+
+* Provide the number of participants who attended the assessment by the time metric(s) for the analysis.
+
+### Dates
+
+* Do date checks for the time frame in the study protocol
+
+* Describe the time metric and corresponding time points specified in the analysis strategy. 
+
+#### Admission Dates
+
+```{r }
+#| label: fig-plot-admit-dates
+#| fig-cap: "Monthly Counts of admission based on admission date"
+
+
+caption_text <- paste0("Each bar is one month." )
+
+df_ida |> 
+  dplyr::mutate(or.month = floor_date(ymd_hms(admitdt), 'month')) |> 
+  janitor::tabyl(or.month) |> 
+  as.data.frame() |> 
+  ggplot(aes(x=ymd(or.month), y=n)) +
+  geom_bar(stat="identity",fill="lightblue")+ 
+  # geom_vline(xintercept = as.numeric(ymd("2022-9-01")),linetype=4, colour="black")+ #the last cohort 1 is 2022-9-1
+  xlab("Admission Dates") +
+    ylab("Count") + 
+# scale_x_date(date_breaks = "1 year", date_labels =  "%Y") + 
+    theme_bw() +
+  ggtitle("Counts of Addmission Dates") + 
+   labs(caption = caption_text)+
+    theme(axis.text.x=element_text(angle=60, hjust=1),
+        plot.title = element_text(face = "bold",  hjust = 0.5),
+        plot.caption = element_text(face = "bold"  )) 
+
+```
+
+@fig-plot-admit-dates shows the first data point is in `r floor_date(ymd_hms(min(df_ida$admitdt)), 'day')` and last data point is in `r floor_date(ymd_hms(max(df_ida$admitdt)), 'day')`.
+
+
+
+
+
+
+## IDA: Missing values {#sec-idamissing}
+ 
+Provide the number and proportion of missing values for each variable at each time point as appropriate for fixed or time-varying variables. Describe missingness stratifying the summaries by variables that might influence the frequency of missing values, if relevant (for example: structural variables or levels of measurement).
+
+ 
+### Prevalence of missing values 
+
+#### For each variable or groups of variables
+
+Provide the number and proportion of missing values for each variable at each time point as appropriate for fixed or time-varying variables. Describe missingness stratifying the summaries by variables that might influence the frequency of missing values, if relevant (for example: structural variables or levels of measurement).
+
+
+```{r}
+#| label: tbl-ida-missingness-by-variable-demog_vars
+#| tbl-cap: "Summary of missing values for demographic variables"
+
+
+df_ida |>
+  select(demog_vars) |>
+  miss_var_summary() |>
+  gt() |>
+    gt::cols_label(
+    variable = "Variable",
+    n_miss = "Missing (count)",
+    pct_miss = "Missing (%)"
+  ) |>
+  fmt_number(
+    columns = vars(pct_miss),
+    decimals = 1
+  ) |>
+  tab_header(title = "Summary of missing values for demographic variables ") |>
+  gt_theme_538()
+
+```
+
+@tbl-ida-missingness-by-variable-demog_vars includes the baseline characteristics variables of the patients.
+
+#### Complete cases
+
+Describe number of complete observations when considering outcome and explanatory variables for any model.
+ 
+```{r}
+#| label: tbl-ida-missingness-complete-case
+#| tbl-cap: "Summary of complete cases by sets of variables"
+
+
+# Number of available complete cases (outcome and predictors):
+# from Regression without regrets github code
+
+ ard_all <- df_ida |> 
+    #filter(KEY_PRED_FL01 == "Y") |>
+    # select(SUBJID, PARAMCD, AVAL, SEXC, AGEGR01, AGEGR01C) |>
+    # pivot_wider(names_from = PARAMCD, values_from = AVAL, values_fill = NA) |>
+    # select(-SUBJID) |>
+    # group_by(SEXC, AGEGR01, AGEGR01C) |>
+    miss_case_table() |> 
+    filter(n_miss_in_case == 0) |>
+    mutate(Set = "All variables in the dataset", 
+           row_order = 1) |>
+    ungroup()
+
+ard_demog <- df_ida |> 
+    #filter(KEY_PRED_FL01 == "Y") |>
+    select(demog_vars) |>
+    # pivot_wider(names_from = PARAMCD, values_from = AVAL, values_fill = NA) |>
+    # select(-SUBJID) |>
+    # group_by(SEXC, AGEGR01, AGEGR01C) |>
+    miss_case_table() |> 
+    filter(n_miss_in_case == 0) |>
+    mutate(Set = "Demographic variables", 
+           row_order = 2) |>
+    ungroup()
+
+
+final_ard |> 
+  select(Set, n_cases, pct_cases ) |>
+  gt() |>
+   cols_label(
+    Set  = "Set",
+    n_cases = "Complete (count)",
+    pct_cases = "Complete (%)"
+  ) |>
+  fmt_number(
+    columns = c(pct_cases),
+    decimals = 1
+  ) |>
+  tab_header(title = "Summary of complete cases by sets of variables") |>
+  gt_theme_538() 
+
+```
+
+
+### Missing values by Case
+
+```{r}
+#| label: fig-missing-data-using-vis_miss
+#| fig-cap: "Missing data patten"
+#| warning: false
+
+
+# filter
+df_ida |> 
+  select(where(function(x) sum(is.na(x)) / length(x) > 0))|> # only show the ones with missing values
+  vis_miss()
+
+```
+
+@fig-missing-data-using-vis_miss shows patterns of missingness for variables with at least has one missing value.
+
+
+## IDA: Univariate descriptions {#sec-idaunivariate}
+ 
+This section summarizes each variable by using appropriate summary statistics to make sure data properties are as expected and support the choices of  statistical methods.
+
+*Optional: If this is a longitudinal study, describe variables at each time point.*
+ 
+### Demographic variables
+
+Summarize the demographic variables with numerical and graphical summaries.
+
+```{r }
+#| label: ida-describe-demog_vars
+
+
+d <- df_ida |> 
+  dplyr::select(any_of(demog_vars)) |> 
+ Hmisc::describe()
+
+Hmisc::html(d)
+# Hmisc::html(d, size=80, scroll=TRUE)
+
+```
+
+
+### Explanatory variables
+
+Summarize the explanatory variables with numerical and graphical summaries at baseline.
+
+```{r}
+#| label: fig-highresolution-hist
+#| fig-cap: "High definition of histograms for variable"
+
+df_ida |> 
+  ggplot(aes(x=varname))+
+  geom_histogram(nbin=100, color="grey")+
+    xlab("varname") +
+    ylab("Count") + 
+    theme_bw() 
+
+```
+
+### Outcome variables
+
+Summarize the outcome variable  with numerical and graphical summaries at baseline.
+
+ 
+
+
+## IDA: Multivariate descriptions {#sec-idamultivariate}
+
+
+### Association
+
+Visualize and summarize the association of each predictor with the structural variables. 
+
+
+```{r }
+#| label: tbl-ida-multi-compare-demog_vars
+#| tbl-cap: "Demographic variables by var"
+
+
+
+
+formula_multi <- formula(paste0(paste0(demog_vars, collapse = " + "),"~ structuralvar"))
+
+s <-  Hmisc::summaryM(formula_multi, data=df_ida, overall=TRUE, test = TRUE )
+
+
+Hmisc::html(
+  s,
+  caption = 'Demographic variables by structural variable',
+  exclude1 = TRUE,
+  npct = 'both',
+  digits = 3,
+  pctdig =3,
+  pdig = 3, eps = 0.001, #pvalue digits
+  prmsd = TRUE,
+  brmsd = TRUE,
+  Nsize=TRUE
+)
+
+```
+
+@tbl-ida-multi-compare-demog_vars shows XYZ. 
+
+
+### Correlation
+
+Quantify pairwise correlations between all key predictors 
+
+### Interactions, if applicable
+
+Evaluate bivariate distributions of the predictors specified in interactions. Include appropriate graphical displays.
+
+### Clustering, optional
+
+Visualize clustering of predictors using a dendrogram to show closely associated predictors 
+
+
+
+
+## IDA longitudinal aspects {#sec-idalongitudinal}
+
+### Profiles
+
+Summarize changes and variability of variables within subjects, e.g. profile plots (spaghetti-plots) for groups of individuals.
+
+### Trends
+
+* Describe numerically or graphically longitudinal(average) trends of the outcome variable.
+
+* Describe numerically or graphically the longitudinal trends of the time-varying variables.
+
+### Time-to-event variables
+
+Visualize with cumulative incidence plots
+
+
+ 
+
+
+# Statistical analyses
+ 
+In this section, we will follow the analysis strategy outlined in the SAP for each outcome.
+ 
+## Model(s) for primary outcome
+
+
+## Model(s) for secondary outcome
+
+
+
+
+# Session Info
+
+```{r}
+#| include: false
+
+
+sessionInfo()
+
+```
+
+
+
+
+# References
+
+
+

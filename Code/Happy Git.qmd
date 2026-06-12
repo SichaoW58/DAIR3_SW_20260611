@@ -1,0 +1,37 @@
+# 1st step: github.com to create a new repo from template, *please do this first*
+
+Copy the HTTPS.
+
+# 2nd: When a new case got assigned, a new R project will be created in the consultant specified directiory. SW habit: Casenumber_Clienlastname_clientfirstname. From git
+
+```{r}
+#| label: load-pkg
+library(usethis)
+## file folder setup
+library(fs)   # creat folder dir_create()
+library(here) # easy to do cross reference in the project.
+
+
+```
+
+Insert the git HTTPS below to pull the template setting and start R project
+
+```{r}
+usethis::create_from_github(
+  "https://github.com/CSTAT-CVM/Testing.git",
+  destdir = "C:/Users/wangsic1/OneDrive - Michigan State University/CSTAT main/2023 Summer/Case/"
+)
+```
+
+# Since I put the setup files in git template, I do not need the 3rd step here.
+
+# BTW, I should keep my setup files updated on git.
+
+3rd step: copy the setup file.
+
+```{r}
+#| label: move set up file
+
+file_copy("C:/Users/wangsic1/OneDrive - Michigan State University/CSTAT main/Template/2nd_Set up folders_8_7_2023.qmd", "C:/Users/wangsic1/OneDrive - Michigan State University/CSTAT main/2023 Summer/Case/C5858_Wang_Sichao", overwrite = FALSE)
+
+```

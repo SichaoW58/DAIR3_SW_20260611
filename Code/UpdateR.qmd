@@ -1,0 +1,40 @@
+---
+title: "Update R"
+format: html
+editor: visual
+---
+
+## Update R
+
+We use [installr](https://talgalili.github.io/installr/) package to update R.
+
+```{r}
+#| label: Install-installr
+
+if(!require("installr")) install.packages('installr')
+library("installr")
+
+```
+
+```{r}
+#| label: update-r
+#| eval: false
+
+updateR() # this will open dialog boxes to take you through the steps.
+# OR use:
+# updateR(TRUE) # this will use common defaults and will be the safest/fastest option
+```
+
+```{r}
+#|label: install-multi-version
+# step by step functions:
+check.for.updates.R() # tells you if there is a new version of R or not.
+install.R() # download and run the latest R installer
+copy.packages.between.libraries() # copy your packages to the newest R installation from the one version before it (if ask=T, it will ask you between which two versions to perform the copying)
+```
+
+Notice that because the admin restriction, I can only install under my profile. So I have to use ctrl+click to open and choose which R version to run.
+
+```{r}
+R.version.string
+```

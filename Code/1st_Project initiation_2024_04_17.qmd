@@ -1,0 +1,47 @@
+---
+title: "Create a new project"
+author: "SW"
+format: html
+editor: visual
+---
+
+This file is meant to complete the 1st step in the workflow for a new consultanting case and 2nd step move the template to the new R project
+
+1st step: When a new case got assigned, a new R project will be created in the consultant specified directiory. SW habit: Casenumber_Clienlastname_clientfirstname.
+
+```{r}
+#| label: load-pkg
+library(usethis)
+## file folder setup
+library(fs)   # creat folder dir_create()
+library(here) # easy to do cross reference in the project.
+
+
+```
+
+```{r}
+#| label: create new proj
+
+# I wish to use usethis pkg create_project(), however it won't do without git. Until we find a solution, we will manually delete git files.
+
+#One reason I like use this code to create project is the speed. A lot of time it takes a while to create a new project and wait for it open. With the code, it takes seconds and open automatically.
+
+create_project(path = "P:/Consulting/Secure/THAA/C000_test",open = TRUE, rstudio = TRUE)
+
+
+
+```
+
+2nd step: copy the setup file.
+
+```{r}
+#| label: move set up file
+
+file_copy("C:/Users/wangsic1/OneDrive - Michigan State University/CSTAT main/Template/Quarto template for CVM/2nd_Set up folders_2024_04_17.qmd", "P:/Consulting/Secure/THAA/C000_test", overwrite = FALSE)
+
+
+```
+
+Once the setup file created in the new R project, we will open set up file to create folders.
+
+SW: Thinking combine this with set up.
