@@ -1,2 +1,2 @@
-# Template_CVM
-CVM project starting template. When you creat new repo from this please rename the repo. SW habit: Casenumber_clienlastname_clientfirstnam
+# Template_DAIR3
+Create a template repo for DAIR3 session
